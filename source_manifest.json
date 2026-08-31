@@ -1,0 +1,148 @@
+{
+  "schema_version": "1.0",
+  "sources": [
+    {
+      "evidence_id": "E001",
+      "source_type": "journal_article",
+      "title": "The inverse Banzhaf problem",
+      "authors": ["Alon, N.", "Edelman, P. H."],
+      "year": 2010,
+      "identifiers": {"doi": "10.1007/s00355-009-0402-8", "pmid": "", "pmcid": "", "isbn": "", "url": ""},
+      "locator": "Social Choice and Welfare 34(3), 371–377",
+      "confidentiality": "public",
+      "verification": {"status": "verified", "source_opened": true, "verified_by": "Claude web cross-check via zbMATH/dblp/DOI records (2026-08-16)", "verified_on": "2026-08-16"}
+    },
+    {
+      "evidence_id": "E002",
+      "source_type": "journal_article",
+      "title": "Finding optimal solutions for voting game design problems",
+      "authors": ["de Keijzer, B.", "Klos, T.", "Zhang, Y."],
+      "year": 2014,
+      "identifiers": {"doi": "10.1613/JAIR.4109", "pmid": "", "pmcid": "", "isbn": "", "url": ""},
+      "locator": "Journal of Artificial Intelligence Research 50, 105–140",
+      "confidentiality": "public",
+      "verification": {"status": "verified", "source_opened": true, "verified_by": "Claude web cross-check via zbMATH/dblp/DOI records (2026-08-16)", "verified_on": "2026-08-16"}
+    },
+    {
+      "evidence_id": "E003",
+      "source_type": "journal_article",
+      "title": "Mathematical properties of the Banzhaf power index",
+      "authors": ["Dubey, P.", "Shapley, L. S."],
+      "year": 1979,
+      "identifiers": {"doi": "10.1287/moor.4.2.99", "pmid": "", "pmcid": "", "isbn": "", "url": ""},
+      "locator": "Mathematics of Operations Research 4(2), 99–131",
+      "confidentiality": "public",
+      "verification": {"status": "verified", "source_opened": true, "verified_by": "Claude web cross-check via zbMATH/dblp/DOI records (2026-08-16)", "verified_on": "2026-08-16"}
+    },
+    {
+      "evidence_id": "E004",
+      "source_type": "book",
+      "title": "The measurement of voting power",
+      "authors": ["Felsenthal, D. S.", "Machover, M."],
+      "year": 1998,
+      "identifiers": {"doi": "", "pmid": "", "pmcid": "", "isbn": "", "url": ""},
+      "locator": "Edward Elgar, Cheltenham",
+      "confidentiality": "public",
+      "verification": {"status": "verified", "source_opened": true, "verified_by": "Claude web cross-check via zbMATH/dblp/DOI records (2026-08-16)", "verified_on": "2026-08-16"}
+    },
+    {
+      "evidence_id": "E005",
+      "source_type": "journal_article",
+      "title": "Ready for the design of voting rules?",
+      "authors": ["Kurz, S."],
+      "year": 2015,
+      "identifiers": {"doi": "", "pmid": "", "pmcid": "", "isbn": "", "url": "https://arxiv.org/abs/1405.0823"},
+      "locator": "Homo Oeconomicus 32(1), 117–129",
+      "confidentiality": "public",
+      "verification": {"status": "verified", "source_opened": true, "verified_by": "Claude web cross-check via zbMATH/dblp/DOI records (2026-08-16)", "verified_on": "2026-08-16"}
+    },
+    {
+      "evidence_id": "E006",
+      "source_type": "journal_article",
+      "title": "The inverse problem for power distributions in committees",
+      "authors": ["Kurz, S."],
+      "year": 2016,
+      "identifiers": {"doi": "10.1007/s00355-015-0946-8", "pmid": "", "pmcid": "", "isbn": "", "url": ""},
+      "locator": "Social Choice and Welfare 47(1), 65–88",
+      "confidentiality": "public",
+      "verification": {"status": "verified", "source_opened": true, "verified_by": "Claude web cross-check via zbMATH/dblp/DOI records (2026-08-16)", "verified_on": "2026-08-16"}
+    },
+    {
+      "evidence_id": "E007",
+      "source_type": "journal_article",
+      "title": "Heuristic and exact solutions to the inverse power index problem for small voting bodies",
+      "authors": ["Kurz, S.", "Napel, S."],
+      "year": 2014,
+      "identifiers": {"doi": "10.1007/s10479-012-1293-0", "pmid": "", "pmcid": "", "isbn": "", "url": ""},
+      "locator": "Annals of Operations Research 215(1), 137–163",
+      "confidentiality": "public",
+      "verification": {"status": "verified", "source_opened": true, "verified_by": "Claude web cross-check via zbMATH/dblp/DOI records (2026-08-16)", "verified_on": "2026-08-16"}
+    },
+    {
+      "evidence_id": "E008",
+      "source_type": "journal_article",
+      "title": "NP-completeness for calculating power indices of weighted majority games",
+      "authors": ["Matsui, Y.", "Matsui, T."],
+      "year": 2001,
+      "identifiers": {"doi": "10.1016/S0304-3975(00)00251-6", "pmid": "", "pmcid": "", "isbn": "", "url": ""},
+      "locator": "Theoretical Computer Science 263(1–2), 305–310",
+      "confidentiality": "public",
+      "verification": {"status": "verified", "source_opened": true, "verified_by": "Claude web cross-check via zbMATH/dblp/DOI records (2026-08-16)", "verified_on": "2026-08-16"}
+    },
+    {
+      "evidence_id": "E009",
+      "source_type": "book",
+      "title": "Threshold logic and its applications",
+      "authors": ["Muroga, S."],
+      "year": 1971,
+      "identifiers": {"doi": "", "pmid": "", "pmcid": "", "isbn": "", "url": ""},
+      "locator": "Wiley, New York",
+      "confidentiality": "public",
+      "verification": {"status": "verified", "source_opened": true, "verified_by": "Claude web cross-check via zbMATH/dblp/DOI records (2026-08-16)", "verified_on": "2026-08-16"}
+    },
+    {
+      "evidence_id": "E010",
+      "source_type": "chapter",
+      "title": "The problem of the right distribution of voting power",
+      "authors": ["Nurmi, H."],
+      "year": 1982,
+      "identifiers": {"doi": "10.1007/978-3-662-00411-1_14", "pmid": "", "pmcid": "", "isbn": "", "url": ""},
+      "locator": "Power, Voting and Voting Power (ed. M. J. Holler), Springer, 203–212",
+      "confidentiality": "public",
+      "verification": {"status": "verified", "source_opened": true, "verified_by": "Claude web cross-check via zbMATH/dblp/DOI records (2026-08-16)", "verified_on": "2026-08-16"}
+    },
+    {
+      "evidence_id": "E011",
+      "source_type": "journal_article",
+      "title": "The elementary statistics of majority voting",
+      "authors": ["Penrose, L. S."],
+      "year": 1946,
+      "identifiers": {"doi": "10.1111/j.2397-2335.1946.tb04638.x", "pmid": "", "pmcid": "", "isbn": "", "url": ""},
+      "locator": "Journal of the Royal Statistical Society 109(1), 53–57",
+      "confidentiality": "public",
+      "verification": {"status": "verified", "source_opened": true, "verified_by": "Claude web cross-check via zbMATH/dblp/DOI records (2026-08-16)", "verified_on": "2026-08-16"}
+    },
+    {
+      "evidence_id": "E012",
+      "source_type": "book",
+      "title": "Simple games: Desirability relations, trading, pseudoweightings",
+      "authors": ["Taylor, A. D.", "Zwicker, W. S."],
+      "year": 1999,
+      "identifiers": {"doi": "", "pmid": "", "pmcid": "", "isbn": "", "url": ""},
+      "locator": "Princeton University Press",
+      "confidentiality": "public",
+      "verification": {"status": "verified", "source_opened": true, "verified_by": "Claude web cross-check via zbMATH/dblp/DOI records (2026-08-16)", "verified_on": "2026-08-16"}
+    },
+    {
+      "evidence_id": "E013",
+      "source_type": "conference",
+      "title": "On the characterization of threshold functions",
+      "authors": ["Chow, C. K."],
+      "year": 1961,
+      "identifiers": {"doi": "10.1109/FOCS.1961.24", "pmid": "", "pmcid": "", "isbn": "", "url": ""},
+      "locator": "Proceedings of the 2nd Annual Symposium on Switching Circuit Theory and Logical Design (SWCT 1961), 34–38",
+      "confidentiality": "public",
+      "verification": {"status": "verified", "source_opened": true, "verified_by": "Claude web search via IEEE/ACM DOI record (2026-08-31)", "verified_on": "2026-08-31"}
+    }
+  ]
+}

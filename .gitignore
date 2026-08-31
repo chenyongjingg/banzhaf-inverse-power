@@ -1,0 +1,23 @@
+# LaTeX / build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Intermediate solver output (created at runtime)
+paper-raw/
+*.json.bak
+
+# OS
+.DS_Store
+Thumbs.db
