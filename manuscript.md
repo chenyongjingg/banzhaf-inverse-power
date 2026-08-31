@@ -1033,8 +1033,9 @@ paper.
 25CSH113.
 
 **Data availability.** All results reported in this paper are reproducible from the companion code
-package (CP-SAT/HiGHS models, instance tables, and recorded runtimes) that accompanies this
-submission and will be released alongside the paper.
+package (CP-SAT/HiGHS models, instance tables, and recorded runtimes), publicly available at
+
+https://github.com/chenyongjingg/banzhaf-inverse-power
 
 **CRediT authorship contribution statement.** Yongjin
 Chen: Conceptualization, Methodology, Investigation, Writing — original draft. Shi Jin: Formal
