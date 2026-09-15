@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""EJOR case study: exact Banzhaf of historical EU Council weighted bodies,
+"""Case study: exact Banzhaf of historical EU Council weighted bodies,
 and their L1-distance to the egalitarian target psi^n.
 
 All bodies in the certified range n in {6,...,10} are exactly certified by the
@@ -71,7 +71,8 @@ if __name__ == "__main__":
     report("EEC-10 (1981-1986)",    [10,10,10,10,5,5,5,3,3,2], 45, True)
     # Scaling context (n>10, Tier-3 heuristic only, exact infeasibility NOT certified):
     report("EEC-12 (1986-1995)",    [10,10,10,10,8,5,5,5,5,3,3,2], 54, False)
-    report("EU-15 (1995-2004)",     [10,10,10,10,8,5,5,5,5,4,4,4,3,3,2], 62, False)
+    # 1995-2004: 62 of 87 votes; Austria and Sweden 4, Denmark, Finland and Ireland 3.
+    report("EU-15 (1995-2004)",     [10,10,10,10,8,5,5,5,5,4,4,3,3,3,2], 62, False)
 
     # The certified global L1-optimum from the paper for n=6 (weights (3,1,3,3,3,1), q=11)
     print("=== reference: paper's certified L1-optimum for n=6 ===")

@@ -1,0 +1,16 @@
+=== n=12 budget=3600s at 2026-09-14T01:41:18 ===
+{
+ "n": 12,
+ "formulation": "F2",
+ "outcome": "OPTIMAL",
+ "solve_time_s": 918.872284299985,
+ "wall_time_s": null,
+ "build_time_s": 0.0912118999985978,
+ "num_variables": 4097,
+ "num_constraints": 24591,
+ "c": 20,
+ "solver_status": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+ "solver": "scipy.optimize.milp (HiGHS)",
+ "c_bound_used": "c <= 100, exactly as hard-coded in code/milp_n8.py (bounds.ub[c_idx]=100)"
+}
+--- wall 920.0s ---

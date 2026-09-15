@@ -1,0 +1,4011 @@
+{
+ "meta": {
+  "generated": "2026-09-13T23:17:27",
+  "target": "psi^n = (2,...,2,1)/(2n-1); swings eta_i = 2c for i != n-1 and eta_{n-1} = c, c >= 1 integer",
+  "distinguished_player": "index n-1 (0-based) in all three formulations",
+  "ns": [
+   6,
+   7,
+   8,
+   9,
+   10,
+   12,
+   14,
+   16,
+   18,
+   20
+  ],
+  "solver_time_limit_s": 300,
+  "build_budget_s": 300,
+  "worker_wall_cap_s": 690,
+  "outcome_codes": {
+   "OPTIMAL": "solver proved optimality",
+   "FEASIBLE": "solver returned a feasible incumbent without proving optimality",
+   "INFEASIBLE": "solver proved infeasibility",
+   "TIMEOUT": "solver hit the 300s time limit",
+   "BUILD_FAILED": "model could not be built within the build budget (null counts)",
+   "UNBOUNDED": "solver reported unbounded"
+  },
+  "formulations": {
+   "F1": {
+    "name": "direct weight-space, big-M coalition indicators",
+    "written_in": "code/benchmark_formulations.py",
+    "solver": "scipy.optimize.milp -> HiGHS",
+    "weight_bound": "w_i in [1, W], W = 2^(n-1)",
+    "weight_bound_rationale": "W = 2^(n-1) is the bound used by the paper's own weight-space script q3/conj15_feas.py, whose docstring states it is conclusive; a smaller W would risk a false INFEASIBLE, so no smaller bound is used here.",
+    "bigM": "F1 big-M constants actually used. The equivalence y_S = 1 iff sum_{i in S} w_i >= q is encoded by two rows per nonempty proper coalition S. (U) 'y = 0 => sum <= q - 1':  sum_{i in S} w_i - q - (W*|S|) * y_S <= -1, i.e. the big-M is exactly the prescribed W*|S|; it is valid because sum_{i in S} w_i <= W*|S| for every feasible point, so the row cannot cut off a winning coalition. (L) 'y = 1 => sum >= q':  sum_{i in S} w_i - q - (n*W - |S|) * y_S >= -(n*W - |S|), with the constant big-M n*W - |S| = max(q - sum_{i in S} w_i) over the box 1 <= w_i <= W, 1 <= q <= n*W; this is the tight value for that direction. Both multipliers are constants (not variable-dependent), so both rows are linear. y_empty is fixed to 0 and y_full to 1, so neither gets a variable; one extra row sum_i w_i - q >= 0 forces the grand coalition to win.",
+    "symmetry_breaking": "none"
+   },
+   "F2": {
+    "name": "general monotone-Boolean model (manuscript Section 7)",
+    "reused_file": "code/milp_n8.py",
+    "reuse_method": "source text loaded, the constants n / NV / c_idx and the solver time limit substituted, then exec'd unchanged",
+    "solver": "scipy.optimize.milp -> HiGHS",
+    "note_on_c_bound": "code/milp_n8.py itself bounds c <= 100 (bounds.ub[c_idx] = 100); this was left unchanged. The manuscript's own constructions give c <= 24 for every n <= 20 considered here, so this cap cannot turn a feasible instance into an infeasible one at these n."
+   },
+   "F3": {
+    "name": "compressed W-family model with O(n^3) variables (Proposition 12 / Section 10.1)",
+    "reused_file": "code/cpsat_wfamily.py",
+    "reuse_method": "imported as a module; its own main() called with sys.argv patched; the CP-SAT model captured by spying on CpSolver.Solve so the counts are the ones it builds",
+    "solver": "OR-Tools CP-SAT"
+   }
+  },
+  "solver_versions": {
+   "python": "3.14.4",
+   "ortools": "9.15.6755",
+   "scipy": "1.17.1",
+   "highs": "1.12.0",
+   "highs_via": "scipy.optimize.milp"
+  },
+  "host": {
+   "platform": "Windows-11-10.0.26200-SP0",
+   "python": "3.14.4",
+   "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD"
+  },
+  "selftest_note": "The same encoders are run against a target that IS realizable by a weighted majority game: the unanimity vector (1,...,1), realized by w = (1,...,1), q = n. A FEASIBLE verdict there shows the encoding is able to find realizable targets, so a non-FEASIBLE verdict on psi^n is not an artefact of a broken model.",
+  "exact_commands": {
+   "F3_n6": "python.exe code/benchmark_formulations.py --one F3 --n 6 --timeout 300 --build-budget 300",
+   "F3_n7": "python.exe code/benchmark_formulations.py --one F3 --n 7 --timeout 300 --build-budget 300",
+   "F3_n8": "python.exe code/benchmark_formulations.py --one F3 --n 8 --timeout 300 --build-budget 300",
+   "F3_n9": "python.exe code/benchmark_formulations.py --one F3 --n 9 --timeout 300 --build-budget 300",
+   "F3_n10": "python.exe code/benchmark_formulations.py --one F3 --n 10 --timeout 300 --build-budget 300",
+   "F3_n12": "python.exe code/benchmark_formulations.py --one F3 --n 12 --timeout 300 --build-budget 300",
+   "F3_n14": "python.exe code/benchmark_formulations.py --one F3 --n 14 --timeout 300 --build-budget 300",
+   "F3_n16": "python.exe code/benchmark_formulations.py --one F3 --n 16 --timeout 300 --build-budget 300",
+   "F3_n18": "python.exe code/benchmark_formulations.py --one F3 --n 18 --timeout 300 --build-budget 300",
+   "F3_n20": "python.exe code/benchmark_formulations.py --one F3 --n 20 --timeout 300 --build-budget 300",
+   "F1_n6": "python.exe code/benchmark_formulations.py --one F1 --n 6 --timeout 300 --build-budget 300",
+   "F1_n7": "python.exe code/benchmark_formulations.py --one F1 --n 7 --timeout 300 --build-budget 300",
+   "F1_n8": "python.exe code/benchmark_formulations.py --one F1 --n 8 --timeout 300 --build-budget 300",
+   "F1_n9": "python.exe code/benchmark_formulations.py --one F1 --n 9 --timeout 300 --build-budget 300",
+   "F1_n10": "python.exe code/benchmark_formulations.py --one F1 --n 10 --timeout 300 --build-budget 300",
+   "F1_n12": "python.exe code/benchmark_formulations.py --one F1 --n 12 --timeout 300 --build-budget 300",
+   "F1_n14": "python.exe code/benchmark_formulations.py --one F1 --n 14 --timeout 300 --build-budget 300",
+   "F1_n16": "python.exe code/benchmark_formulations.py --one F1 --n 16 --timeout 300 --build-budget 300",
+   "F1_n18": "python.exe code/benchmark_formulations.py --one F1 --n 18 --timeout 300 --build-budget 300",
+   "F1_n20": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F1 --n 20 --timeout 300 --build-budget 300",
+   "F2_n6": "python.exe code/benchmark_formulations.py --one F2 --n 6 --timeout 300 --build-budget 300",
+   "F2_n7": "python.exe code/benchmark_formulations.py --one F2 --n 7 --timeout 300 --build-budget 300",
+   "F2_n8": "python.exe code/benchmark_formulations.py --one F2 --n 8 --timeout 300 --build-budget 300",
+   "F2_n9": "python.exe code/benchmark_formulations.py --one F2 --n 9 --timeout 300 --build-budget 300",
+   "F2_n10": "python.exe code/benchmark_formulations.py --one F2 --n 10 --timeout 300 --build-budget 300",
+   "F2_n12": "python.exe code/benchmark_formulations.py --one F2 --n 12 --timeout 300 --build-budget 300",
+   "F2_n14": "python.exe code/benchmark_formulations.py --one F2 --n 14 --timeout 300 --build-budget 300",
+   "F2_n16": "python.exe code/benchmark_formulations.py --one F2 --n 16 --timeout 300 --build-budget 300",
+   "F2_n18": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F2 --n 18 --timeout 300 --build-budget 300",
+   "F2_n20": "python.exe code/benchmark_formulations.py --one F2 --n 20 --timeout 300 --build-budget 300"
+  },
+  "json_path": "data/benchmark_formulations.json",
+  "markdown_path": "code/benchmark_formulations_results.md",
+  "selftest_results": {
+   "F1_unanimity_n6": {
+    "outcome": "OPTIMAL",
+    "solver_status": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "num_variables": 71,
+    "num_constraints": 131,
+    "c": 1,
+    "verification": {
+     "swings_by_direct_enumeration": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "gcd_normalized": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "target_pattern": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "matches_target": true,
+     "n_coalitions_enumerated": 64,
+     "witness": {
+      "w": [
+       32,
+       1,
+       32,
+       32,
+       32,
+       32
+      ],
+      "q": 161,
+      "c": 1
+     }
+    }
+   },
+   "F1_unanimity_n8": {
+    "outcome": "OPTIMAL",
+    "solver_status": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "num_variables": 265,
+    "num_constraints": 517,
+    "c": 1,
+    "verification": {
+     "swings_by_direct_enumeration": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "gcd_normalized": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "target_pattern": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+     ],
+     "matches_target": true,
+     "n_coalitions_enumerated": 256,
+     "witness": {
+      "w": [
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1,
+       1
+      ],
+      "q": 1,
+      "c": 1
+     }
+    }
+   },
+   "F1_unanimity_hand_witness_n6": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+   ],
+   "F3_enumeration_vs_closed_form_n6": {
+    "method": "complement-edge",
+    "c": 4,
+    "swings": [
+     8,
+     8,
+     8,
+     8,
+     8,
+     4
+    ],
+    "normalized": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "matches_target": true
+   }
+  },
+  "reruns": [
+   {
+    "formulation": "F1",
+    "n": 20,
+    "when": "2026-09-14T00:54:17",
+    "reason": "wall-clock cap killed the worker during the solve, and the build record was not flushed before the fix; re-taken with the build record flushed first",
+    "command": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F1 --n 20 --timeout 300 --build-budget 300",
+    "outcome": "BUILD_FAILED"
+   },
+   {
+    "formulation": "F2",
+    "n": 18,
+    "when": "2026-09-14T00:54:28",
+    "reason": "wall-clock cap killed the worker during the solve, and the build record was not flushed before the fix; re-taken with the build record flushed first",
+    "command": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F2 --n 18 --timeout 300 --build-budget 300",
+    "outcome": "BUILD_FAILED"
+   },
+   {
+    "formulation": "F1",
+    "n": 20,
+    "when": "2026-09-14T01:13:03",
+    "reason": "the previous F1 n=20 record was a wall-clock-cap kill during the solve with the build record not yet flushed (fixed); re-taken",
+    "command": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F1 --n 20 --timeout 300 --build-budget 300",
+    "outcome": "TIMEOUT",
+    "solver_status": "worker killed at the 690s wall-clock cap while the solver was still running; the model was built (so this is not a build failure) but the solver returned no status of its own",
+    "supersedes_previous_record": true
+   },
+   {
+    "formulation": "F2",
+    "n": 18,
+    "when": "2026-09-14T01:24:34",
+    "reason": "the previous F2 n=18 record was a wall-clock-cap kill during the solve with the build record not yet flushed (fixed); re-taken",
+    "command": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F2 --n 18 --timeout 300 --build-budget 300",
+    "outcome": "TIMEOUT",
+    "solver_status": "worker killed at the 690s wall-clock cap while the solver was still running; the model was built (so this is not a build failure) but the solver returned no status of its own",
+    "supersedes_previous_record": true
+   }
+  ],
+  "longer_budget_reruns": [
+   {
+    "formulation": "F2",
+    "n": 11,
+    "configuration": "the discovery copy of the general monotone model of code/milp_verify.py, which bounds c <= 100000 rather than c <= 100",
+    "configuration_key": "milp_verify",
+    "command": "python code/milp_verify.py 11 3600",
+    "budget_s": 3600,
+    "outcome": "OPTIMAL",
+    "solve_time_s": 25.9,
+    "wall_time_s": null,
+    "c": 14,
+    "solver_status": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "when": "2026-09-14T01:41:15",
+    "spliced_into_results": false,
+    "source_log": "code/consistency_check/sec7_rerun.log"
+   },
+   {
+    "formulation": "F2",
+    "n": 12,
+    "configuration": "the benchmark's own F2 configuration, reused from code/milp_n8.py, which bounds c <= 100",
+    "configuration_key": "benchmark",
+    "command": "python code/consistency_check/rerun_f2_config.py 12 3600",
+    "budget_s": 3600,
+    "outcome": "OPTIMAL",
+    "solve_time_s": 918.872284299985,
+    "wall_time_s": 920.0,
+    "c": 20,
+    "solver_status": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "when": "2026-09-14T01:41:18",
+    "spliced_into_results": false,
+    "source_log": "code/consistency_check/f2_config_rerun.log"
+   },
+   {
+    "formulation": "F2",
+    "n": 12,
+    "configuration": "the discovery copy of the general monotone model of code/milp_verify.py, which bounds c <= 100000 rather than c <= 100",
+    "configuration_key": "milp_verify",
+    "command": "python code/milp_verify.py 12 3600",
+    "budget_s": 3600,
+    "outcome": "OPTIMAL",
+    "solve_time_s": 270.3,
+    "wall_time_s": null,
+    "c": 20,
+    "solver_status": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "when": "2026-09-14T01:41:15",
+    "spliced_into_results": false,
+    "source_log": "code/consistency_check/sec7_rerun.log"
+   }
+  ]
+ },
+ "results": [
+  {
+   "formulation": "F3",
+   "n": 6,
+   "build_time_s": 0.00403740000911057,
+   "solve_time_s": 0.03119840001454577,
+   "num_variables": 96,
+   "num_constraints": 246,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are read off the CP-SAT model proto built by code/cpsat_wfamily.py itself: len(proto.variables) and len(proto.constraints). CP-SAT may split one source-level row into several proto constraints, so the constraint count is the proto count, not a count of source lines.",
+    "analytic_variable_count": {
+     "pairs_C_n_2": 15,
+     "triples_C_n_3": 20,
+     "z_terms_3_per_triple": 60,
+     "scale_c": 1,
+     "analytic_total": 96
+    }
+   },
+   "solver": "OR-Tools CP-SAT",
+   "c": 4,
+   "solution": {
+    "c": 4,
+    "n_edges_G": 7,
+    "n_triples_F": 0,
+    "G": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      5
+     ],
+     [
+      2,
+      5
+     ],
+     [
+      3,
+      4
+     ],
+     [
+      3,
+      5
+     ],
+     [
+      4,
+      5
+     ]
+    ],
+    "F": []
+   },
+   "verification": {
+    "swings_by_direct_enumeration": [
+     8,
+     8,
+     8,
+     8,
+     8,
+     4
+    ],
+    "gcd_normalized": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "target_pattern": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "matches_target": true,
+    "n_coalitions_enumerated": 64,
+    "witness": {
+     "c": 4,
+     "n_edges_G": 7,
+     "n_triples_F": 0
+    }
+   },
+   "outcome": "OPTIMAL",
+   "solver_status": "OPTIMAL",
+   "solver_status_code": 4,
+   "reused_file": "code/cpsat_wfamily.py",
+   "reuse_method": "imported as a module; its own main() called with sys.argv patched; the CP-SAT model captured by spying on CpSolver.Solve",
+   "raw_stdout_tail": "n=6: status=OPTIMAL time=0s\n  c=4 |G|=7 |F|=0\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F3 --n 6 --timeout 300 --build-budget 300",
+   "wall_time_s": 1.2594018000527285,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F3",
+   "n": 7,
+   "build_time_s": 0.006349200033582747,
+   "solve_time_s": 0.052731000003404915,
+   "num_variables": 162,
+   "num_constraints": 427,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are read off the CP-SAT model proto built by code/cpsat_wfamily.py itself: len(proto.variables) and len(proto.constraints). CP-SAT may split one source-level row into several proto constraints, so the constraint count is the proto count, not a count of source lines.",
+    "analytic_variable_count": {
+     "pairs_C_n_2": 21,
+     "triples_C_n_3": 35,
+     "z_terms_3_per_triple": 105,
+     "scale_c": 1,
+     "analytic_total": 162
+    }
+   },
+   "solver": "OR-Tools CP-SAT",
+   "c": 6,
+   "solution": {
+    "c": 6,
+    "n_edges_G": 12,
+    "n_triples_F": 0,
+    "G": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      6
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      1,
+      6
+     ],
+     [
+      2,
+      6
+     ],
+     [
+      3,
+      4
+     ],
+     [
+      3,
+      5
+     ],
+     [
+      3,
+      6
+     ],
+     [
+      4,
+      5
+     ],
+     [
+      4,
+      6
+     ],
+     [
+      5,
+      6
+     ]
+    ],
+    "F": []
+   },
+   "verification": {
+    "swings_by_direct_enumeration": [
+     12,
+     12,
+     12,
+     12,
+     12,
+     12,
+     6
+    ],
+    "gcd_normalized": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "target_pattern": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "matches_target": true,
+    "n_coalitions_enumerated": 128,
+    "witness": {
+     "c": 6,
+     "n_edges_G": 12,
+     "n_triples_F": 0
+    }
+   },
+   "outcome": "OPTIMAL",
+   "solver_status": "OPTIMAL",
+   "solver_status_code": 4,
+   "reused_file": "code/cpsat_wfamily.py",
+   "reuse_method": "imported as a module; its own main() called with sys.argv patched; the CP-SAT model captured by spying on CpSolver.Solve",
+   "raw_stdout_tail": "n=7: status=OPTIMAL time=0s\n  c=6 |G|=12 |F|=0\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F3 --n 7 --timeout 300 --build-budget 300",
+   "wall_time_s": 1.1778235000092536,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F3",
+   "n": 8,
+   "build_time_s": 0.009315400035120547,
+   "solve_time_s": 0.06507690000580624,
+   "num_variables": 253,
+   "num_constraints": 680,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are read off the CP-SAT model proto built by code/cpsat_wfamily.py itself: len(proto.variables) and len(proto.constraints). CP-SAT may split one source-level row into several proto constraints, so the constraint count is the proto count, not a count of source lines.",
+    "analytic_variable_count": {
+     "pairs_C_n_2": 28,
+     "triples_C_n_3": 56,
+     "z_terms_3_per_triple": 168,
+     "scale_c": 1,
+     "analytic_total": 253
+    }
+   },
+   "solver": "OR-Tools CP-SAT",
+   "c": 8,
+   "solution": {
+    "c": 8,
+    "n_edges_G": 15,
+    "n_triples_F": 2,
+    "G": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      0,
+      6
+     ],
+     [
+      0,
+      7
+     ],
+     [
+      1,
+      5
+     ],
+     [
+      1,
+      7
+     ],
+     [
+      2,
+      3
+     ],
+     [
+      2,
+      4
+     ],
+     [
+      2,
+      7
+     ],
+     [
+      3,
+      5
+     ],
+     [
+      3,
+      6
+     ],
+     [
+      4,
+      6
+     ],
+     [
+      4,
+      7
+     ],
+     [
+      5,
+      7
+     ],
+     [
+      6,
+      7
+     ]
+    ],
+    "F": [
+     [
+      1,
+      5,
+      7
+     ],
+     [
+      2,
+      4,
+      7
+     ]
+    ]
+   },
+   "verification": {
+    "swings_by_direct_enumeration": [
+     16,
+     16,
+     16,
+     16,
+     16,
+     16,
+     16,
+     8
+    ],
+    "gcd_normalized": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "target_pattern": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "matches_target": true,
+    "n_coalitions_enumerated": 256,
+    "witness": {
+     "c": 8,
+     "n_edges_G": 15,
+     "n_triples_F": 2
+    }
+   },
+   "outcome": "OPTIMAL",
+   "solver_status": "OPTIMAL",
+   "solver_status_code": 4,
+   "reused_file": "code/cpsat_wfamily.py",
+   "reuse_method": "imported as a module; its own main() called with sys.argv patched; the CP-SAT model captured by spying on CpSolver.Solve",
+   "raw_stdout_tail": "n=8: status=OPTIMAL time=0s\n  c=8 |G|=15 |F|=2\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F3 --n 8 --timeout 300 --build-budget 300",
+   "wall_time_s": 1.2574214999913238,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F3",
+   "n": 9,
+   "build_time_s": 0.012853499967604876,
+   "solve_time_s": 0.06753360002767295,
+   "num_variables": 373,
+   "num_constraints": 1017,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are read off the CP-SAT model proto built by code/cpsat_wfamily.py itself: len(proto.variables) and len(proto.constraints). CP-SAT may split one source-level row into several proto constraints, so the constraint count is the proto count, not a count of source lines.",
+    "analytic_variable_count": {
+     "pairs_C_n_2": 36,
+     "triples_C_n_3": 84,
+     "z_terms_3_per_triple": 252,
+     "scale_c": 1,
+     "analytic_total": 373
+    }
+   },
+   "solver": "OR-Tools CP-SAT",
+   "c": 6,
+   "solution": {
+    "c": 6,
+    "n_edges_G": 6,
+    "n_triples_F": 0,
+    "G": [
+     [
+      0,
+      7
+     ],
+     [
+      1,
+      8
+     ],
+     [
+      2,
+      5
+     ],
+     [
+      3,
+      8
+     ],
+     [
+      4,
+      8
+     ],
+     [
+      6,
+      8
+     ]
+    ],
+    "F": []
+   },
+   "verification": {
+    "swings_by_direct_enumeration": [
+     12,
+     12,
+     12,
+     12,
+     12,
+     12,
+     12,
+     12,
+     6
+    ],
+    "gcd_normalized": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "target_pattern": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "matches_target": true,
+    "n_coalitions_enumerated": 512,
+    "witness": {
+     "c": 6,
+     "n_edges_G": 6,
+     "n_triples_F": 0
+    }
+   },
+   "outcome": "OPTIMAL",
+   "solver_status": "OPTIMAL",
+   "solver_status_code": 4,
+   "reused_file": "code/cpsat_wfamily.py",
+   "reuse_method": "imported as a module; its own main() called with sys.argv patched; the CP-SAT model captured by spying on CpSolver.Solve",
+   "raw_stdout_tail": "n=9: status=OPTIMAL time=0s\n  c=6 |G|=6 |F|=0\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F3 --n 9 --timeout 300 --build-budget 300",
+   "wall_time_s": 1.1707329000346363,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F3",
+   "n": 10,
+   "build_time_s": 0.01950100000249222,
+   "solve_time_s": 0.4297573000076227,
+   "num_variables": 526,
+   "num_constraints": 1450,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are read off the CP-SAT model proto built by code/cpsat_wfamily.py itself: len(proto.variables) and len(proto.constraints). CP-SAT may split one source-level row into several proto constraints, so the constraint count is the proto count, not a count of source lines.",
+    "analytic_variable_count": {
+     "pairs_C_n_2": 45,
+     "triples_C_n_3": 120,
+     "z_terms_3_per_triple": 360,
+     "scale_c": 1,
+     "analytic_total": 526
+    }
+   },
+   "solver": "OR-Tools CP-SAT",
+   "c": 10,
+   "solution": {
+    "c": 10,
+    "n_edges_G": 16,
+    "n_triples_F": 1,
+    "G": [
+     [
+      0,
+      3
+     ],
+     [
+      0,
+      5
+     ],
+     [
+      0,
+      8
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      1,
+      5
+     ],
+     [
+      1,
+      6
+     ],
+     [
+      2,
+      4
+     ],
+     [
+      2,
+      9
+     ],
+     [
+      3,
+      9
+     ],
+     [
+      4,
+      9
+     ],
+     [
+      5,
+      9
+     ],
+     [
+      6,
+      7
+     ],
+     [
+      6,
+      9
+     ],
+     [
+      7,
+      8
+     ],
+     [
+      7,
+      9
+     ],
+     [
+      8,
+      9
+     ]
+    ],
+    "F": [
+     [
+      2,
+      4,
+      9
+     ]
+    ]
+   },
+   "verification": {
+    "swings_by_direct_enumeration": [
+     20,
+     20,
+     20,
+     20,
+     20,
+     20,
+     20,
+     20,
+     20,
+     10
+    ],
+    "gcd_normalized": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "target_pattern": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "matches_target": true,
+    "n_coalitions_enumerated": 1024,
+    "witness": {
+     "c": 10,
+     "n_edges_G": 16,
+     "n_triples_F": 1
+    }
+   },
+   "outcome": "OPTIMAL",
+   "solver_status": "OPTIMAL",
+   "solver_status_code": 4,
+   "reused_file": "code/cpsat_wfamily.py",
+   "reuse_method": "imported as a module; its own main() called with sys.argv patched; the CP-SAT model captured by spying on CpSolver.Solve",
+   "raw_stdout_tail": "n=10: status=OPTIMAL time=0s\n  c=10 |G|=16 |F|=1\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F3 --n 10 --timeout 300 --build-budget 300",
+   "wall_time_s": 1.6133569999947213,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F3",
+   "n": 12,
+   "build_time_s": 0.03632249997463077,
+   "solve_time_s": 0.2859417999861762,
+   "num_variables": 947,
+   "num_constraints": 2652,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are read off the CP-SAT model proto built by code/cpsat_wfamily.py itself: len(proto.variables) and len(proto.constraints). CP-SAT may split one source-level row into several proto constraints, so the constraint count is the proto count, not a count of source lines.",
+    "analytic_variable_count": {
+     "pairs_C_n_2": 66,
+     "triples_C_n_3": 220,
+     "z_terms_3_per_triple": 660,
+     "scale_c": 1,
+     "analytic_total": 947
+    }
+   },
+   "solver": "OR-Tools CP-SAT",
+   "c": 24,
+   "solution": {
+    "c": 24,
+    "n_edges_G": 39,
+    "n_triples_F": 18,
+    "G": [
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      3
+     ],
+     [
+      0,
+      10
+     ],
+     [
+      0,
+      11
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      1,
+      4
+     ],
+     [
+      1,
+      5
+     ],
+     [
+      1,
+      11
+     ],
+     [
+      2,
+      3
+     ],
+     [
+      2,
+      5
+     ],
+     [
+      2,
+      9
+     ],
+     [
+      2,
+      10
+     ],
+     [
+      2,
+      11
+     ],
+     [
+      3,
+      5
+     ],
+     [
+      3,
+      8
+     ],
+     [
+      3,
+      11
+     ],
+     [
+      4,
+      6
+     ],
+     [
+      4,
+      7
+     ],
+     [
+      4,
+      8
+     ],
+     [
+      4,
+      10
+     ],
+     [
+      4,
+      11
+     ],
+     [
+      5,
+      7
+     ],
+     [
+      5,
+      8
+     ],
+     [
+      5,
+      11
+     ],
+     [
+      6,
+      7
+     ],
+     [
+      6,
+      8
+     ],
+     [
+      6,
+      9
+     ],
+     [
+      6,
+      10
+     ],
+     [
+      6,
+      11
+     ],
+     [
+      7,
+      8
+     ],
+     [
+      7,
+      9
+     ],
+     [
+      7,
+      11
+     ],
+     [
+      8,
+      9
+     ],
+     [
+      8,
+      10
+     ],
+     [
+      8,
+      11
+     ],
+     [
+      9,
+      10
+     ],
+     [
+      9,
+      11
+     ],
+     [
+      10,
+      11
+     ]
+    ],
+    "F": [
+     [
+      0,
+      1,
+      3
+     ],
+     [
+      0,
+      1,
+      11
+     ],
+     [
+      0,
+      2,
+      10
+     ],
+     [
+      0,
+      2,
+      11
+     ],
+     [
+      0,
+      3,
+      11
+     ],
+     [
+      1,
+      3,
+      5
+     ],
+     [
+      1,
+      4,
+      11
+     ],
+     [
+      1,
+      5,
+      11
+     ],
+     [
+      2,
+      3,
+      5
+     ],
+     [
+      2,
+      9,
+      11
+     ],
+     [
+      4,
+      6,
+      10
+     ],
+     [
+      4,
+      7,
+      8
+     ],
+     [
+      4,
+      7,
+      11
+     ],
+     [
+      5,
+      7,
+      11
+     ],
+     [
+      6,
+      8,
+      9
+     ],
+     [
+      6,
+      9,
+      11
+     ],
+     [
+      6,
+      10,
+      11
+     ],
+     [
+      7,
+      9,
+      11
+     ]
+    ]
+   },
+   "verification": {
+    "swings_by_direct_enumeration": [
+     48,
+     48,
+     48,
+     48,
+     48,
+     48,
+     48,
+     48,
+     48,
+     48,
+     48,
+     24
+    ],
+    "gcd_normalized": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "target_pattern": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "matches_target": true,
+    "n_coalitions_enumerated": 4096,
+    "witness": {
+     "c": 24,
+     "n_edges_G": 39,
+     "n_triples_F": 18
+    }
+   },
+   "outcome": "OPTIMAL",
+   "solver_status": "OPTIMAL",
+   "solver_status_code": 4,
+   "reused_file": "code/cpsat_wfamily.py",
+   "reuse_method": "imported as a module; its own main() called with sys.argv patched; the CP-SAT model captured by spying on CpSolver.Solve",
+   "raw_stdout_tail": "n=12: status=OPTIMAL time=0s\n  c=24 |G|=39 |F|=18\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F3 --n 12 --timeout 300 --build-budget 300",
+   "wall_time_s": 1.4973286999738775,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F3",
+   "n": 14,
+   "build_time_s": 0.06125679996330291,
+   "solve_time_s": 0.5133408000110649,
+   "num_variables": 1548,
+   "num_constraints": 4382,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are read off the CP-SAT model proto built by code/cpsat_wfamily.py itself: len(proto.variables) and len(proto.constraints). CP-SAT may split one source-level row into several proto constraints, so the constraint count is the proto count, not a count of source lines.",
+    "analytic_variable_count": {
+     "pairs_C_n_2": 91,
+     "triples_C_n_3": 364,
+     "z_terms_3_per_triple": 1092,
+     "scale_c": 1,
+     "analytic_total": 1548
+    }
+   },
+   "solver": "OR-Tools CP-SAT",
+   "c": 16,
+   "solution": {
+    "c": 16,
+    "n_edges_G": 25,
+    "n_triples_F": 0,
+    "G": [
+     [
+      0,
+      7
+     ],
+     [
+      0,
+      9
+     ],
+     [
+      0,
+      13
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      1,
+      8
+     ],
+     [
+      1,
+      13
+     ],
+     [
+      2,
+      6
+     ],
+     [
+      2,
+      11
+     ],
+     [
+      2,
+      12
+     ],
+     [
+      3,
+      10
+     ],
+     [
+      3,
+      13
+     ],
+     [
+      4,
+      5
+     ],
+     [
+      4,
+      9
+     ],
+     [
+      4,
+      10
+     ],
+     [
+      5,
+      11
+     ],
+     [
+      5,
+      13
+     ],
+     [
+      6,
+      7
+     ],
+     [
+      6,
+      13
+     ],
+     [
+      7,
+      13
+     ],
+     [
+      8,
+      12
+     ],
+     [
+      8,
+      13
+     ],
+     [
+      9,
+      13
+     ],
+     [
+      10,
+      13
+     ],
+     [
+      11,
+      13
+     ],
+     [
+      12,
+      13
+     ]
+    ],
+    "F": []
+   },
+   "verification": {
+    "swings_by_direct_enumeration": [
+     32,
+     32,
+     32,
+     32,
+     32,
+     32,
+     32,
+     32,
+     32,
+     32,
+     32,
+     32,
+     32,
+     16
+    ],
+    "gcd_normalized": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "target_pattern": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "matches_target": true,
+    "n_coalitions_enumerated": 16384,
+    "witness": {
+     "c": 16,
+     "n_edges_G": 25,
+     "n_triples_F": 0
+    }
+   },
+   "outcome": "OPTIMAL",
+   "solver_status": "OPTIMAL",
+   "solver_status_code": 4,
+   "reused_file": "code/cpsat_wfamily.py",
+   "reuse_method": "imported as a module; its own main() called with sys.argv patched; the CP-SAT model captured by spying on CpSolver.Solve",
+   "raw_stdout_tail": "n=14: status=OPTIMAL time=1s\n  c=16 |G|=25 |F|=0\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F3 --n 14 --timeout 300 --build-budget 300",
+   "wall_time_s": 1.711701099993661,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F3",
+   "n": 16,
+   "build_time_s": 0.09609780000755563,
+   "solve_time_s": 0.7295754000078887,
+   "num_variables": 2361,
+   "num_constraints": 6736,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are read off the CP-SAT model proto built by code/cpsat_wfamily.py itself: len(proto.variables) and len(proto.constraints). CP-SAT may split one source-level row into several proto constraints, so the constraint count is the proto count, not a count of source lines.",
+    "analytic_variable_count": {
+     "pairs_C_n_2": 120,
+     "triples_C_n_3": 560,
+     "z_terms_3_per_triple": 1680,
+     "scale_c": 1,
+     "analytic_total": 2361
+    }
+   },
+   "solver": "OR-Tools CP-SAT",
+   "c": 12,
+   "solution": {
+    "c": 12,
+    "n_edges_G": 11,
+    "n_triples_F": 0,
+    "G": [
+     [
+      0,
+      8
+     ],
+     [
+      1,
+      9
+     ],
+     [
+      2,
+      6
+     ],
+     [
+      3,
+      5
+     ],
+     [
+      4,
+      15
+     ],
+     [
+      7,
+      15
+     ],
+     [
+      10,
+      15
+     ],
+     [
+      11,
+      15
+     ],
+     [
+      12,
+      15
+     ],
+     [
+      13,
+      15
+     ],
+     [
+      14,
+      15
+     ]
+    ],
+    "F": []
+   },
+   "verification": {
+    "swings_by_direct_enumeration": [
+     24,
+     24,
+     24,
+     24,
+     24,
+     24,
+     24,
+     24,
+     24,
+     24,
+     24,
+     24,
+     24,
+     24,
+     24,
+     12
+    ],
+    "gcd_normalized": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "target_pattern": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "matches_target": true,
+    "n_coalitions_enumerated": 65536,
+    "witness": {
+     "c": 12,
+     "n_edges_G": 11,
+     "n_triples_F": 0
+    }
+   },
+   "outcome": "OPTIMAL",
+   "solver_status": "OPTIMAL",
+   "solver_status_code": 4,
+   "reused_file": "code/cpsat_wfamily.py",
+   "reuse_method": "imported as a module; its own main() called with sys.argv patched; the CP-SAT model captured by spying on CpSolver.Solve",
+   "raw_stdout_tail": "n=16: status=OPTIMAL time=1s\n  c=12 |G|=11 |F|=0\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F3 --n 16 --timeout 300 --build-budget 300",
+   "wall_time_s": 1.9343766999663785,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F3",
+   "n": 18,
+   "build_time_s": 0.1359830999863334,
+   "solve_time_s": 1.2925072999787517,
+   "num_variables": 3418,
+   "num_constraints": 9810,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are read off the CP-SAT model proto built by code/cpsat_wfamily.py itself: len(proto.variables) and len(proto.constraints). CP-SAT may split one source-level row into several proto constraints, so the constraint count is the proto count, not a count of source lines.",
+    "analytic_variable_count": {
+     "pairs_C_n_2": 153,
+     "triples_C_n_3": 816,
+     "z_terms_3_per_triple": 2448,
+     "scale_c": 1,
+     "analytic_total": 3418
+    }
+   },
+   "solver": "OR-Tools CP-SAT",
+   "c": 28,
+   "solution": {
+    "c": 28,
+    "n_edges_G": 43,
+    "n_triples_F": 6,
+    "G": [
+     [
+      0,
+      3
+     ],
+     [
+      0,
+      4
+     ],
+     [
+      0,
+      5
+     ],
+     [
+      0,
+      12
+     ],
+     [
+      0,
+      14
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      1,
+      4
+     ],
+     [
+      1,
+      12
+     ],
+     [
+      1,
+      16
+     ],
+     [
+      1,
+      17
+     ],
+     [
+      2,
+      9
+     ],
+     [
+      2,
+      10
+     ],
+     [
+      2,
+      13
+     ],
+     [
+      2,
+      14
+     ],
+     [
+      3,
+      15
+     ],
+     [
+      3,
+      16
+     ],
+     [
+      3,
+      17
+     ],
+     [
+      4,
+      15
+     ],
+     [
+      4,
+      16
+     ],
+     [
+      4,
+      17
+     ],
+     [
+      5,
+      6
+     ],
+     [
+      5,
+      7
+     ],
+     [
+      5,
+      17
+     ],
+     [
+      6,
+      7
+     ],
+     [
+      6,
+      8
+     ],
+     [
+      6,
+      17
+     ],
+     [
+      7,
+      17
+     ],
+     [
+      8,
+      11
+     ],
+     [
+      8,
+      13
+     ],
+     [
+      8,
+      16
+     ],
+     [
+      8,
+      17
+     ],
+     [
+      9,
+      10
+     ],
+     [
+      9,
+      17
+     ],
+     [
+      10,
+      17
+     ],
+     [
+      11,
+      12
+     ],
+     [
+      11,
+      15
+     ],
+     [
+      11,
+      17
+     ],
+     [
+      12,
+      17
+     ],
+     [
+      13,
+      14
+     ],
+     [
+      13,
+      17
+     ],
+     [
+      14,
+      17
+     ],
+     [
+      15,
+      16
+     ],
+     [
+      15,
+      17
+     ]
+    ],
+    "F": [
+     [
+      2,
+      9,
+      10
+     ],
+     [
+      5,
+      7,
+      17
+     ],
+     [
+      6,
+      7,
+      17
+     ],
+     [
+      9,
+      10,
+      17
+     ],
+     [
+      11,
+      12,
+      17
+     ],
+     [
+      13,
+      14,
+      17
+     ]
+    ]
+   },
+   "verification": {
+    "swings_by_direct_enumeration": [
+     56,
+     56,
+     56,
+     56,
+     56,
+     56,
+     56,
+     56,
+     56,
+     56,
+     56,
+     56,
+     56,
+     56,
+     56,
+     56,
+     56,
+     28
+    ],
+    "gcd_normalized": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "target_pattern": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "matches_target": true,
+    "n_coalitions_enumerated": 262144,
+    "witness": {
+     "c": 28,
+     "n_edges_G": 43,
+     "n_triples_F": 6
+    }
+   },
+   "outcome": "OPTIMAL",
+   "solver_status": "OPTIMAL",
+   "solver_status_code": 4,
+   "reused_file": "code/cpsat_wfamily.py",
+   "reuse_method": "imported as a module; its own main() called with sys.argv patched; the CP-SAT model captured by spying on CpSolver.Solve",
+   "raw_stdout_tail": "n=18: status=OPTIMAL time=1s\n  c=28 |G|=43 |F|=6\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F3 --n 18 --timeout 300 --build-budget 300",
+   "wall_time_s": 2.6548768000211567,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F3",
+   "n": 20,
+   "build_time_s": 0.1944132999633439,
+   "solve_time_s": 2.1426802999922074,
+   "num_variables": 4751,
+   "num_constraints": 13700,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are read off the CP-SAT model proto built by code/cpsat_wfamily.py itself: len(proto.variables) and len(proto.constraints). CP-SAT may split one source-level row into several proto constraints, so the constraint count is the proto count, not a count of source lines.",
+    "analytic_variable_count": {
+     "pairs_C_n_2": 190,
+     "triples_C_n_3": 1140,
+     "z_terms_3_per_triple": 3420,
+     "scale_c": 1,
+     "analytic_total": 4751
+    }
+   },
+   "solver": "OR-Tools CP-SAT",
+   "c": 58,
+   "solution": {
+    "c": 58,
+    "n_edges_G": 94,
+    "n_triples_F": 27,
+    "G": [
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      7
+     ],
+     [
+      0,
+      13
+     ],
+     [
+      0,
+      15
+     ],
+     [
+      0,
+      16
+     ],
+     [
+      0,
+      17
+     ],
+     [
+      0,
+      18
+     ],
+     [
+      0,
+      19
+     ],
+     [
+      1,
+      3
+     ],
+     [
+      1,
+      5
+     ],
+     [
+      1,
+      8
+     ],
+     [
+      1,
+      9
+     ],
+     [
+      1,
+      14
+     ],
+     [
+      1,
+      17
+     ],
+     [
+      1,
+      18
+     ],
+     [
+      1,
+      19
+     ],
+     [
+      2,
+      8
+     ],
+     [
+      2,
+      9
+     ],
+     [
+      2,
+      15
+     ],
+     [
+      2,
+      16
+     ],
+     [
+      2,
+      17
+     ],
+     [
+      2,
+      18
+     ],
+     [
+      2,
+      19
+     ],
+     [
+      3,
+      5
+     ],
+     [
+      3,
+      9
+     ],
+     [
+      3,
+      12
+     ],
+     [
+      3,
+      13
+     ],
+     [
+      3,
+      14
+     ],
+     [
+      3,
+      19
+     ],
+     [
+      4,
+      8
+     ],
+     [
+      4,
+      10
+     ],
+     [
+      4,
+      15
+     ],
+     [
+      4,
+      16
+     ],
+     [
+      4,
+      17
+     ],
+     [
+      4,
+      18
+     ],
+     [
+      4,
+      19
+     ],
+     [
+      5,
+      6
+     ],
+     [
+      5,
+      8
+     ],
+     [
+      5,
+      10
+     ],
+     [
+      5,
+      11
+     ],
+     [
+      5,
+      16
+     ],
+     [
+      5,
+      17
+     ],
+     [
+      5,
+      18
+     ],
+     [
+      5,
+      19
+     ],
+     [
+      6,
+      7
+     ],
+     [
+      6,
+      10
+     ],
+     [
+      6,
+      11
+     ],
+     [
+      6,
+      13
+     ],
+     [
+      6,
+      17
+     ],
+     [
+      6,
+      19
+     ],
+     [
+      7,
+      8
+     ],
+     [
+      7,
+      9
+     ],
+     [
+      7,
+      14
+     ],
+     [
+      7,
+      15
+     ],
+     [
+      7,
+      16
+     ],
+     [
+      7,
+      17
+     ],
+     [
+      7,
+      18
+     ],
+     [
+      7,
+      19
+     ],
+     [
+      8,
+      10
+     ],
+     [
+      8,
+      11
+     ],
+     [
+      8,
+      12
+     ],
+     [
+      8,
+      13
+     ],
+     [
+      8,
+      19
+     ],
+     [
+      9,
+      10
+     ],
+     [
+      9,
+      11
+     ],
+     [
+      9,
+      12
+     ],
+     [
+      9,
+      19
+     ],
+     [
+      10,
+      11
+     ],
+     [
+      10,
+      14
+     ],
+     [
+      10,
+      15
+     ],
+     [
+      10,
+      17
+     ],
+     [
+      10,
+      18
+     ],
+     [
+      10,
+      19
+     ],
+     [
+      11,
+      14
+     ],
+     [
+      11,
+      15
+     ],
+     [
+      11,
+      16
+     ],
+     [
+      11,
+      17
+     ],
+     [
+      11,
+      18
+     ],
+     [
+      11,
+      19
+     ],
+     [
+      12,
+      14
+     ],
+     [
+      12,
+      15
+     ],
+     [
+      12,
+      16
+     ],
+     [
+      12,
+      19
+     ],
+     [
+      13,
+      14
+     ],
+     [
+      13,
+      15
+     ],
+     [
+      13,
+      16
+     ],
+     [
+      13,
+      17
+     ],
+     [
+      13,
+      18
+     ],
+     [
+      13,
+      19
+     ],
+     [
+      14,
+      19
+     ],
+     [
+      15,
+      19
+     ],
+     [
+      16,
+      19
+     ],
+     [
+      17,
+      19
+     ],
+     [
+      18,
+      19
+     ]
+    ],
+    "F": [
+     [
+      0,
+      2,
+      15
+     ],
+     [
+      0,
+      2,
+      16
+     ],
+     [
+      0,
+      2,
+      18
+     ],
+     [
+      0,
+      7,
+      19
+     ],
+     [
+      1,
+      3,
+      5
+     ],
+     [
+      1,
+      8,
+      19
+     ],
+     [
+      1,
+      9,
+      19
+     ],
+     [
+      1,
+      14,
+      19
+     ],
+     [
+      2,
+      9,
+      19
+     ],
+     [
+      3,
+      9,
+      19
+     ],
+     [
+      3,
+      12,
+      14
+     ],
+     [
+      3,
+      13,
+      19
+     ],
+     [
+      3,
+      14,
+      19
+     ],
+     [
+      4,
+      8,
+      19
+     ],
+     [
+      4,
+      15,
+      19
+     ],
+     [
+      4,
+      16,
+      19
+     ],
+     [
+      4,
+      17,
+      19
+     ],
+     [
+      4,
+      18,
+      19
+     ],
+     [
+      5,
+      6,
+      19
+     ],
+     [
+      6,
+      7,
+      19
+     ],
+     [
+      6,
+      10,
+      19
+     ],
+     [
+      6,
+      11,
+      19
+     ],
+     [
+      6,
+      13,
+      19
+     ],
+     [
+      9,
+      12,
+      19
+     ],
+     [
+      12,
+      14,
+      19
+     ],
+     [
+      12,
+      15,
+      19
+     ],
+     [
+      12,
+      16,
+      19
+     ]
+    ]
+   },
+   "verification": {
+    "swings_by_direct_enumeration": [
+     116,
+     116,
+     116,
+     116,
+     116,
+     116,
+     116,
+     116,
+     116,
+     116,
+     116,
+     116,
+     116,
+     116,
+     116,
+     116,
+     116,
+     116,
+     116,
+     58
+    ],
+    "gcd_normalized": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "target_pattern": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "matches_target": true,
+    "n_coalitions_enumerated": 1048576,
+    "witness": {
+     "c": 58,
+     "n_edges_G": 94,
+     "n_triples_F": 27
+    }
+   },
+   "outcome": "OPTIMAL",
+   "solver_status": "OPTIMAL",
+   "solver_status_code": 4,
+   "reused_file": "code/cpsat_wfamily.py",
+   "reuse_method": "imported as a module; its own main() called with sys.argv patched; the CP-SAT model captured by spying on CpSolver.Solve",
+   "raw_stdout_tail": "n=20: status=OPTIMAL time=2s\n  c=58 |G|=94 |F|=27\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F3 --n 20 --timeout 300 --build-budget 300",
+   "wall_time_s": 3.9953683999483474,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F1",
+   "n": 6,
+   "build_time_s": 0.0011061999830417335,
+   "num_variables": 71,
+   "num_constraints": 131,
+   "num_nonzeros": 1005,
+   "counts_breakdown": {
+    "num_variables": 71,
+    "num_constraints": 131,
+    "num_nonzeros": 1005,
+    "variable_breakdown": {
+     "weights": 6,
+     "quota": 1,
+     "scale_c": 1,
+     "coalition_binaries_y_S": 62,
+     "fixed_y_empty": 0,
+     "fixed_y_full": 1
+    },
+    "constraint_breakdown": {
+     "bigM_upper": 62,
+     "bigM_lower": 62,
+     "swing_equations": 6,
+     "grand_coalition_wins": 1
+    }
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": null,
+   "solution": null,
+   "verification": null,
+   "outcome": "INFEASIBLE",
+   "solver_status": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)",
+   "solve_time_s": 43.466873799974564,
+   "model_parameters": {
+    "W": 32,
+    "weight_bound": "1 <= w_i <= 32",
+    "quota_bound": "1 <= q <= 192",
+    "bigM": "F1 big-M constants actually used. The equivalence y_S = 1 iff sum_{i in S} w_i >= q is encoded by two rows per nonempty proper coalition S. (U) 'y = 0 => sum <= q - 1':  sum_{i in S} w_i - q - (W*|S|) * y_S <= -1, i.e. the big-M is exactly the prescribed W*|S|; it is valid because sum_{i in S} w_i <= W*|S| for every feasible point, so the row cannot cut off a winning coalition. (L) 'y = 1 => sum >= q':  sum_{i in S} w_i - q - (n*W - |S|) * y_S >= -(n*W - |S|), with the constant big-M n*W - |S| = max(q - sum_{i in S} w_i) over the box 1 <= w_i <= W, 1 <= q <= n*W; this is the tight value for that direction. Both multipliers are constants (not variable-dependent), so both rows are linear. y_empty is fixed to 0 and y_full to 1, so neither gets a variable; one extra row sum_i w_i - q >= 0 forces the grand coalition to win.",
+    "symmetry_breaking": "none"
+   },
+   "solver_status_code": 2,
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F1 --n 6 --timeout 300 --build-budget 300",
+   "wall_time_s": 44.88531129999319,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F1",
+   "n": 7,
+   "build_time_s": 0.0012426000321283937,
+   "num_variables": 136,
+   "num_constraints": 260,
+   "num_nonzeros": 2283,
+   "counts_breakdown": {
+    "num_variables": 136,
+    "num_constraints": 260,
+    "num_nonzeros": 2283,
+    "variable_breakdown": {
+     "weights": 7,
+     "quota": 1,
+     "scale_c": 1,
+     "coalition_binaries_y_S": 126,
+     "fixed_y_empty": 0,
+     "fixed_y_full": 1
+    },
+    "constraint_breakdown": {
+     "bigM_upper": 126,
+     "bigM_lower": 126,
+     "swing_equations": 7,
+     "grand_coalition_wins": 1
+    }
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": null,
+   "solution": null,
+   "verification": null,
+   "outcome": "TIMEOUT",
+   "solver_status": "Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is None)",
+   "solve_time_s": 300.0183593999827,
+   "model_parameters": {
+    "W": 64,
+    "weight_bound": "1 <= w_i <= 64",
+    "quota_bound": "1 <= q <= 448",
+    "bigM": "F1 big-M constants actually used. The equivalence y_S = 1 iff sum_{i in S} w_i >= q is encoded by two rows per nonempty proper coalition S. (U) 'y = 0 => sum <= q - 1':  sum_{i in S} w_i - q - (W*|S|) * y_S <= -1, i.e. the big-M is exactly the prescribed W*|S|; it is valid because sum_{i in S} w_i <= W*|S| for every feasible point, so the row cannot cut off a winning coalition. (L) 'y = 1 => sum >= q':  sum_{i in S} w_i - q - (n*W - |S|) * y_S >= -(n*W - |S|), with the constant big-M n*W - |S| = max(q - sum_{i in S} w_i) over the box 1 <= w_i <= W, 1 <= q <= n*W; this is the tight value for that direction. Both multipliers are constants (not variable-dependent), so both rows are linear. y_empty is fixed to 0 and y_full to 1, so neither gets a variable; one extra row sum_i w_i - q >= 0 forces the grand coalition to win.",
+    "symmetry_breaking": "none"
+   },
+   "solver_status_code": 1,
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F1 --n 7 --timeout 300 --build-budget 300",
+   "wall_time_s": 301.3240682000178,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F1",
+   "n": 8,
+   "build_time_s": 0.0021995999850332737,
+   "num_variables": 265,
+   "num_constraints": 517,
+   "num_nonzeros": 5097,
+   "counts_breakdown": {
+    "num_variables": 265,
+    "num_constraints": 517,
+    "num_nonzeros": 5097,
+    "variable_breakdown": {
+     "weights": 8,
+     "quota": 1,
+     "scale_c": 1,
+     "coalition_binaries_y_S": 254,
+     "fixed_y_empty": 0,
+     "fixed_y_full": 1
+    },
+    "constraint_breakdown": {
+     "bigM_upper": 254,
+     "bigM_lower": 254,
+     "swing_equations": 8,
+     "grand_coalition_wins": 1
+    }
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": null,
+   "solution": null,
+   "verification": null,
+   "outcome": "TIMEOUT",
+   "solver_status": "Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is None)",
+   "solve_time_s": 300.0296534000081,
+   "model_parameters": {
+    "W": 128,
+    "weight_bound": "1 <= w_i <= 128",
+    "quota_bound": "1 <= q <= 1024",
+    "bigM": "F1 big-M constants actually used. The equivalence y_S = 1 iff sum_{i in S} w_i >= q is encoded by two rows per nonempty proper coalition S. (U) 'y = 0 => sum <= q - 1':  sum_{i in S} w_i - q - (W*|S|) * y_S <= -1, i.e. the big-M is exactly the prescribed W*|S|; it is valid because sum_{i in S} w_i <= W*|S| for every feasible point, so the row cannot cut off a winning coalition. (L) 'y = 1 => sum >= q':  sum_{i in S} w_i - q - (n*W - |S|) * y_S >= -(n*W - |S|), with the constant big-M n*W - |S| = max(q - sum_{i in S} w_i) over the box 1 <= w_i <= W, 1 <= q <= n*W; this is the tight value for that direction. Both multipliers are constants (not variable-dependent), so both rows are linear. y_empty is fixed to 0 and y_full to 1, so neither gets a variable; one extra row sum_i w_i - q >= 0 forces the grand coalition to win.",
+    "symmetry_breaking": "none"
+   },
+   "solver_status_code": 1,
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F1 --n 8 --timeout 300 --build-budget 300",
+   "wall_time_s": 301.5691319000325,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F1",
+   "n": 9,
+   "build_time_s": 0.0019503000075928867,
+   "num_variables": 522,
+   "num_constraints": 1030,
+   "num_nonzeros": 11239,
+   "counts_breakdown": {
+    "num_variables": 522,
+    "num_constraints": 1030,
+    "num_nonzeros": 11239,
+    "variable_breakdown": {
+     "weights": 9,
+     "quota": 1,
+     "scale_c": 1,
+     "coalition_binaries_y_S": 510,
+     "fixed_y_empty": 0,
+     "fixed_y_full": 1
+    },
+    "constraint_breakdown": {
+     "bigM_upper": 510,
+     "bigM_lower": 510,
+     "swing_equations": 9,
+     "grand_coalition_wins": 1
+    }
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": null,
+   "solution": null,
+   "verification": null,
+   "outcome": "TIMEOUT",
+   "solver_status": "Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is None)",
+   "solve_time_s": 300.0285994000151,
+   "model_parameters": {
+    "W": 256,
+    "weight_bound": "1 <= w_i <= 256",
+    "quota_bound": "1 <= q <= 2304",
+    "bigM": "F1 big-M constants actually used. The equivalence y_S = 1 iff sum_{i in S} w_i >= q is encoded by two rows per nonempty proper coalition S. (U) 'y = 0 => sum <= q - 1':  sum_{i in S} w_i - q - (W*|S|) * y_S <= -1, i.e. the big-M is exactly the prescribed W*|S|; it is valid because sum_{i in S} w_i <= W*|S| for every feasible point, so the row cannot cut off a winning coalition. (L) 'y = 1 => sum >= q':  sum_{i in S} w_i - q - (n*W - |S|) * y_S >= -(n*W - |S|), with the constant big-M n*W - |S| = max(q - sum_{i in S} w_i) over the box 1 <= w_i <= W, 1 <= q <= n*W; this is the tight value for that direction. Both multipliers are constants (not variable-dependent), so both rows are linear. y_empty is fixed to 0 and y_full to 1, so neither gets a variable; one extra row sum_i w_i - q >= 0 forces the grand coalition to win.",
+    "symmetry_breaking": "none"
+   },
+   "solver_status_code": 1,
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F1 --n 9 --timeout 300 --build-budget 300",
+   "wall_time_s": 301.3165417999844,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F1",
+   "n": 10,
+   "build_time_s": 0.0026962999836541712,
+   "num_variables": 1035,
+   "num_constraints": 2055,
+   "num_nonzeros": 24549,
+   "counts_breakdown": {
+    "num_variables": 1035,
+    "num_constraints": 2055,
+    "num_nonzeros": 24549,
+    "variable_breakdown": {
+     "weights": 10,
+     "quota": 1,
+     "scale_c": 1,
+     "coalition_binaries_y_S": 1022,
+     "fixed_y_empty": 0,
+     "fixed_y_full": 1
+    },
+    "constraint_breakdown": {
+     "bigM_upper": 1022,
+     "bigM_lower": 1022,
+     "swing_equations": 10,
+     "grand_coalition_wins": 1
+    }
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": null,
+   "solution": null,
+   "verification": null,
+   "outcome": "TIMEOUT",
+   "solver_status": "Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is None)",
+   "solve_time_s": 300.02976810000837,
+   "model_parameters": {
+    "W": 512,
+    "weight_bound": "1 <= w_i <= 512",
+    "quota_bound": "1 <= q <= 5120",
+    "bigM": "F1 big-M constants actually used. The equivalence y_S = 1 iff sum_{i in S} w_i >= q is encoded by two rows per nonempty proper coalition S. (U) 'y = 0 => sum <= q - 1':  sum_{i in S} w_i - q - (W*|S|) * y_S <= -1, i.e. the big-M is exactly the prescribed W*|S|; it is valid because sum_{i in S} w_i <= W*|S| for every feasible point, so the row cannot cut off a winning coalition. (L) 'y = 1 => sum >= q':  sum_{i in S} w_i - q - (n*W - |S|) * y_S >= -(n*W - |S|), with the constant big-M n*W - |S| = max(q - sum_{i in S} w_i) over the box 1 <= w_i <= W, 1 <= q <= n*W; this is the tight value for that direction. Both multipliers are constants (not variable-dependent), so both rows are linear. y_empty is fixed to 0 and y_full to 1, so neither gets a variable; one extra row sum_i w_i - q >= 0 forces the grand coalition to win.",
+    "symmetry_breaking": "none"
+   },
+   "solver_status_code": 1,
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F1 --n 10 --timeout 300 --build-budget 300",
+   "wall_time_s": 301.4455435000127,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F1",
+   "n": 12,
+   "build_time_s": 0.009375699970405549,
+   "num_variables": 4109,
+   "num_constraints": 8201,
+   "num_nonzeros": 114657,
+   "counts_breakdown": {
+    "num_variables": 4109,
+    "num_constraints": 8201,
+    "num_nonzeros": 114657,
+    "variable_breakdown": {
+     "weights": 12,
+     "quota": 1,
+     "scale_c": 1,
+     "coalition_binaries_y_S": 4094,
+     "fixed_y_empty": 0,
+     "fixed_y_full": 1
+    },
+    "constraint_breakdown": {
+     "bigM_upper": 4094,
+     "bigM_lower": 4094,
+     "swing_equations": 12,
+     "grand_coalition_wins": 1
+    }
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": null,
+   "solution": null,
+   "verification": null,
+   "outcome": "TIMEOUT",
+   "solver_status": "Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is None)",
+   "solve_time_s": 302.9020290999906,
+   "model_parameters": {
+    "W": 2048,
+    "weight_bound": "1 <= w_i <= 2048",
+    "quota_bound": "1 <= q <= 24576",
+    "bigM": "F1 big-M constants actually used. The equivalence y_S = 1 iff sum_{i in S} w_i >= q is encoded by two rows per nonempty proper coalition S. (U) 'y = 0 => sum <= q - 1':  sum_{i in S} w_i - q - (W*|S|) * y_S <= -1, i.e. the big-M is exactly the prescribed W*|S|; it is valid because sum_{i in S} w_i <= W*|S| for every feasible point, so the row cannot cut off a winning coalition. (L) 'y = 1 => sum >= q':  sum_{i in S} w_i - q - (n*W - |S|) * y_S >= -(n*W - |S|), with the constant big-M n*W - |S| = max(q - sum_{i in S} w_i) over the box 1 <= w_i <= W, 1 <= q <= n*W; this is the tight value for that direction. Both multipliers are constants (not variable-dependent), so both rows are linear. y_empty is fixed to 0 and y_full to 1, so neither gets a variable; one extra row sum_i w_i - q >= 0 forces the grand coalition to win.",
+    "symmetry_breaking": "none"
+   },
+   "solver_status_code": 1,
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F1 --n 12 --timeout 300 --build-budget 300",
+   "wall_time_s": 304.6173710000003,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F1",
+   "n": 14,
+   "build_time_s": 0.03925370000069961,
+   "num_variables": 16399,
+   "num_constraints": 32779,
+   "num_nonzeros": 524253,
+   "counts_breakdown": {
+    "num_variables": 16399,
+    "num_constraints": 32779,
+    "num_nonzeros": 524253,
+    "variable_breakdown": {
+     "weights": 14,
+     "quota": 1,
+     "scale_c": 1,
+     "coalition_binaries_y_S": 16382,
+     "fixed_y_empty": 0,
+     "fixed_y_full": 1
+    },
+    "constraint_breakdown": {
+     "bigM_upper": 16382,
+     "bigM_lower": 16382,
+     "swing_equations": 14,
+     "grand_coalition_wins": 1
+    }
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": null,
+   "solution": null,
+   "verification": null,
+   "outcome": "TIMEOUT",
+   "solver_status": "Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is None)",
+   "solve_time_s": 306.05223390000174,
+   "model_parameters": {
+    "W": 8192,
+    "weight_bound": "1 <= w_i <= 8192",
+    "quota_bound": "1 <= q <= 114688",
+    "bigM": "F1 big-M constants actually used. The equivalence y_S = 1 iff sum_{i in S} w_i >= q is encoded by two rows per nonempty proper coalition S. (U) 'y = 0 => sum <= q - 1':  sum_{i in S} w_i - q - (W*|S|) * y_S <= -1, i.e. the big-M is exactly the prescribed W*|S|; it is valid because sum_{i in S} w_i <= W*|S| for every feasible point, so the row cannot cut off a winning coalition. (L) 'y = 1 => sum >= q':  sum_{i in S} w_i - q - (n*W - |S|) * y_S >= -(n*W - |S|), with the constant big-M n*W - |S| = max(q - sum_{i in S} w_i) over the box 1 <= w_i <= W, 1 <= q <= n*W; this is the tight value for that direction. Both multipliers are constants (not variable-dependent), so both rows are linear. y_empty is fixed to 0 and y_full to 1, so neither gets a variable; one extra row sum_i w_i - q >= 0 forces the grand coalition to win.",
+    "symmetry_breaking": "none"
+   },
+   "solver_status_code": 1,
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F1 --n 14 --timeout 300 --build-budget 300",
+   "wall_time_s": 307.5780270000105,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F1",
+   "n": 16,
+   "build_time_s": 0.13684590003686026,
+   "num_variables": 65553,
+   "num_constraints": 131085,
+   "num_nonzeros": 2359257,
+   "counts_breakdown": {
+    "num_variables": 65553,
+    "num_constraints": 131085,
+    "num_nonzeros": 2359257,
+    "variable_breakdown": {
+     "weights": 16,
+     "quota": 1,
+     "scale_c": 1,
+     "coalition_binaries_y_S": 65534,
+     "fixed_y_empty": 0,
+     "fixed_y_full": 1
+    },
+    "constraint_breakdown": {
+     "bigM_upper": 65534,
+     "bigM_lower": 65534,
+     "swing_equations": 16,
+     "grand_coalition_wins": 1
+    }
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": null,
+   "solution": null,
+   "verification": null,
+   "outcome": "TIMEOUT",
+   "solver_status": "Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is None)",
+   "solve_time_s": 300.62682080001105,
+   "model_parameters": {
+    "W": 32768,
+    "weight_bound": "1 <= w_i <= 32768",
+    "quota_bound": "1 <= q <= 524288",
+    "bigM": "F1 big-M constants actually used. The equivalence y_S = 1 iff sum_{i in S} w_i >= q is encoded by two rows per nonempty proper coalition S. (U) 'y = 0 => sum <= q - 1':  sum_{i in S} w_i - q - (W*|S|) * y_S <= -1, i.e. the big-M is exactly the prescribed W*|S|; it is valid because sum_{i in S} w_i <= W*|S| for every feasible point, so the row cannot cut off a winning coalition. (L) 'y = 1 => sum >= q':  sum_{i in S} w_i - q - (n*W - |S|) * y_S >= -(n*W - |S|), with the constant big-M n*W - |S| = max(q - sum_{i in S} w_i) over the box 1 <= w_i <= W, 1 <= q <= n*W; this is the tight value for that direction. Both multipliers are constants (not variable-dependent), so both rows are linear. y_empty is fixed to 0 and y_full to 1, so neither gets a variable; one extra row sum_i w_i - q >= 0 forces the grand coalition to win.",
+    "symmetry_breaking": "none"
+   },
+   "solver_status_code": 1,
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F1 --n 16 --timeout 300 --build-budget 300",
+   "wall_time_s": 301.9995106999995,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F1",
+   "n": 18,
+   "build_time_s": 0.8600140000344254,
+   "num_variables": 262163,
+   "num_constraints": 524303,
+   "num_nonzeros": 10485717,
+   "counts_breakdown": {
+    "num_variables": 262163,
+    "num_constraints": 524303,
+    "num_nonzeros": 10485717,
+    "variable_breakdown": {
+     "weights": 18,
+     "quota": 1,
+     "scale_c": 1,
+     "coalition_binaries_y_S": 262142,
+     "fixed_y_empty": 0,
+     "fixed_y_full": 1
+    },
+    "constraint_breakdown": {
+     "bigM_upper": 262142,
+     "bigM_lower": 262142,
+     "swing_equations": 18,
+     "grand_coalition_wins": 1
+    }
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": null,
+   "solution": null,
+   "verification": null,
+   "outcome": "TIMEOUT",
+   "solver_status": "Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is None)",
+   "solve_time_s": 305.3845195999602,
+   "model_parameters": {
+    "W": 131072,
+    "weight_bound": "1 <= w_i <= 131072",
+    "quota_bound": "1 <= q <= 2359296",
+    "bigM": "F1 big-M constants actually used. The equivalence y_S = 1 iff sum_{i in S} w_i >= q is encoded by two rows per nonempty proper coalition S. (U) 'y = 0 => sum <= q - 1':  sum_{i in S} w_i - q - (W*|S|) * y_S <= -1, i.e. the big-M is exactly the prescribed W*|S|; it is valid because sum_{i in S} w_i <= W*|S| for every feasible point, so the row cannot cut off a winning coalition. (L) 'y = 1 => sum >= q':  sum_{i in S} w_i - q - (n*W - |S|) * y_S >= -(n*W - |S|), with the constant big-M n*W - |S| = max(q - sum_{i in S} w_i) over the box 1 <= w_i <= W, 1 <= q <= n*W; this is the tight value for that direction. Both multipliers are constants (not variable-dependent), so both rows are linear. y_empty is fixed to 0 and y_full to 1, so neither gets a variable; one extra row sum_i w_i - q >= 0 forces the grand coalition to win.",
+    "symmetry_breaking": "none"
+   },
+   "solver_status_code": 1,
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F1 --n 18 --timeout 300 --build-budget 300",
+   "wall_time_s": 307.5481034000404,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F1",
+   "n": 20,
+   "outcome": "TIMEOUT",
+   "solver_status": "worker killed at the 690s wall-clock cap while the solver was still running; the model was built (so this is not a build failure) but the solver returned no status of its own",
+   "build_time_s": 4.303116799972486,
+   "solve_time_s": null,
+   "num_variables": 1048597,
+   "num_constraints": 2097169,
+   "num_nonzeros": null,
+   "counts_breakdown": null,
+   "c": null,
+   "solution": null,
+   "verification": null,
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F1 --n 20 --timeout 300 --build-budget 300",
+   "wall_time_s": 690.4749011999811,
+   "killed_at_wall_cap": true,
+   "rerun": true
+  },
+  {
+   "formulation": "F2",
+   "n": 6,
+   "build_time_s": 0.00405069999396801,
+   "solve_time_s": 0.062146599986590445,
+   "num_variables": 65,
+   "num_constraints": 201,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are exactly what code/milp_n8.py constructs (NV, len(lb))",
+    "coalition_variables": 64,
+    "scale_c": 1,
+    "monotonicity_rows": 192,
+    "swing_rows": 6,
+    "fixed_x_empty": 1,
+    "fixed_x_full": 1
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": 4,
+   "solution": {
+    "c": 4,
+    "max_integrality_violation": 0.0
+   },
+   "verification": {
+    "swings_by_direct_enumeration": [
+     8,
+     8,
+     8,
+     8,
+     8,
+     4
+    ],
+    "gcd_normalized": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "target_pattern": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "matches_target": true,
+    "n_coalitions_enumerated": 64,
+    "witness": {
+     "c": 4
+    }
+   },
+   "outcome": "OPTIMAL",
+   "solver_status": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+   "solver_status_code": 0,
+   "reused_file": "code/milp_n8.py",
+   "reuse_method": "source text loaded, constants n / NV / c_idx / full-coalition literal and the solver time limit substituted, then exec'd unchanged",
+   "patch_diff": [
+    "--- code/milp_n8.py",
+    "+++ code/milp_n8.py (patched for n=6)",
+    "@@ -7,6 +7,5 @@",
+    " ",
+    "-n = 8",
+    "-NV = 257",
+    "-c_idx = 256",
+    "-",
+    "+n = 6",
+    "+NV = (1 << n) + 1",
+    "+c_idx = (1 << n)",
+    " I = []   # row indices",
+    "@@ -26,3 +25,3 @@",
+    " add_constraint({0: 1}, 0, 0)",
+    "-add_constraint({255: 1}, 1, 1)",
+    "+add_constraint({(1 << n) - 1: 1}, 1, 1)",
+    " "
+   ],
+   "patched_constants": {
+    "n": 6,
+    "NV": "(1 << n) + 1",
+    "c_idx": "(1 << n)",
+    "full_coalition_literal": "(1 << n) - 1",
+    "time_limit": 300
+   },
+   "c_bound_used": "c <= 100, exactly as hard-coded in code/milp_n8.py (bounds.ub[c_idx]=100)",
+   "raw_stdout_tail": "time: 0.1s  status: 0  message: Optimization terminated successfully. (HiGHS Status 7: Optimal)\nc = 4\nantichain (minimal winning):\nswings: [8, 8, 8, 8, 8, 4]  (should be [8, 8, 8, 8, 8, 4] )\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F2 --n 6 --timeout 300 --build-budget 300",
+   "wall_time_s": 1.5006077000289224,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F2",
+   "n": 7,
+   "build_time_s": 0.0035516000352799892,
+   "solve_time_s": 0.11754569999175146,
+   "num_variables": 129,
+   "num_constraints": 458,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are exactly what code/milp_n8.py constructs (NV, len(lb))",
+    "coalition_variables": 128,
+    "scale_c": 1,
+    "monotonicity_rows": 448,
+    "swing_rows": 7,
+    "fixed_x_empty": 1,
+    "fixed_x_full": 1
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": 10,
+   "solution": {
+    "c": 10,
+    "max_integrality_violation": 0.0
+   },
+   "verification": {
+    "swings_by_direct_enumeration": [
+     20,
+     20,
+     20,
+     20,
+     20,
+     20,
+     10
+    ],
+    "gcd_normalized": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "target_pattern": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "matches_target": true,
+    "n_coalitions_enumerated": 128,
+    "witness": {
+     "c": 10
+    }
+   },
+   "outcome": "OPTIMAL",
+   "solver_status": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+   "solver_status_code": 0,
+   "reused_file": "code/milp_n8.py",
+   "reuse_method": "source text loaded, constants n / NV / c_idx / full-coalition literal and the solver time limit substituted, then exec'd unchanged",
+   "patch_diff": [
+    "--- code/milp_n8.py",
+    "+++ code/milp_n8.py (patched for n=7)",
+    "@@ -7,6 +7,5 @@",
+    " ",
+    "-n = 8",
+    "-NV = 257",
+    "-c_idx = 256",
+    "-",
+    "+n = 7",
+    "+NV = (1 << n) + 1",
+    "+c_idx = (1 << n)",
+    " I = []   # row indices",
+    "@@ -26,3 +25,3 @@",
+    " add_constraint({0: 1}, 0, 0)",
+    "-add_constraint({255: 1}, 1, 1)",
+    "+add_constraint({(1 << n) - 1: 1}, 1, 1)",
+    " "
+   ],
+   "patched_constants": {
+    "n": 7,
+    "NV": "(1 << n) + 1",
+    "c_idx": "(1 << n)",
+    "full_coalition_literal": "(1 << n) - 1",
+    "time_limit": 300
+   },
+   "c_bound_used": "c <= 100, exactly as hard-coded in code/milp_n8.py (bounds.ub[c_idx]=100)",
+   "raw_stdout_tail": "time: 0.1s  status: 0  message: Optimization terminated successfully. (HiGHS Status 7: Optimal)\nc = 10\nantichain (minimal winning):\nswings: [20, 20, 20, 20, 20, 20, 10]  (should be [20, 20, 20, 20, 20, 20, 10] )\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F2 --n 7 --timeout 300 --build-budget 300",
+   "wall_time_s": 1.3182254999992438,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F2",
+   "n": 8,
+   "build_time_s": 0.005524000036530197,
+   "solve_time_s": 1.4067077000509016,
+   "num_variables": 257,
+   "num_constraints": 1035,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are exactly what code/milp_n8.py constructs (NV, len(lb))",
+    "coalition_variables": 256,
+    "scale_c": 1,
+    "monotonicity_rows": 1024,
+    "swing_rows": 8,
+    "fixed_x_empty": 1,
+    "fixed_x_full": 1
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": 8,
+   "solution": {
+    "c": 8,
+    "max_integrality_violation": 4.440892098500626e-16
+   },
+   "verification": {
+    "swings_by_direct_enumeration": [
+     16,
+     16,
+     16,
+     16,
+     16,
+     16,
+     16,
+     8
+    ],
+    "gcd_normalized": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "target_pattern": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "matches_target": true,
+    "n_coalitions_enumerated": 256,
+    "witness": {
+     "c": 8
+    }
+   },
+   "outcome": "OPTIMAL",
+   "solver_status": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+   "solver_status_code": 0,
+   "reused_file": "code/milp_n8.py",
+   "reuse_method": "source text loaded, constants n / NV / c_idx / full-coalition literal and the solver time limit substituted, then exec'd unchanged",
+   "patch_diff": [
+    "--- code/milp_n8.py",
+    "+++ code/milp_n8.py (patched for n=8)",
+    "@@ -8,5 +8,4 @@",
+    " n = 8",
+    "-NV = 257",
+    "-c_idx = 256",
+    "-",
+    "+NV = (1 << n) + 1",
+    "+c_idx = (1 << n)",
+    " I = []   # row indices",
+    "@@ -26,3 +25,3 @@",
+    " add_constraint({0: 1}, 0, 0)",
+    "-add_constraint({255: 1}, 1, 1)",
+    "+add_constraint({(1 << n) - 1: 1}, 1, 1)",
+    " "
+   ],
+   "patched_constants": {
+    "n": 8,
+    "NV": "(1 << n) + 1",
+    "c_idx": "(1 << n)",
+    "full_coalition_literal": "(1 << n) - 1",
+    "time_limit": 300
+   },
+   "c_bound_used": "c <= 100, exactly as hard-coded in code/milp_n8.py (bounds.ub[c_idx]=100)",
+   "raw_stdout_tail": "time: 1.4s  status: 0  message: Optimization terminated successfully. (HiGHS Status 7: Optimal)\nc = 8\nantichain (minimal winning):\nswings: [16, 16, 16, 16, 16, 16, 16, 8]  (should be [16, 16, 16, 16, 16, 16, 16, 8] )\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F2 --n 8 --timeout 300 --build-budget 300",
+   "wall_time_s": 2.605193600000348,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F2",
+   "n": 9,
+   "build_time_s": 0.009722899994812906,
+   "solve_time_s": 0.7464620999526232,
+   "num_variables": 513,
+   "num_constraints": 2316,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are exactly what code/milp_n8.py constructs (NV, len(lb))",
+    "coalition_variables": 512,
+    "scale_c": 1,
+    "monotonicity_rows": 2304,
+    "swing_rows": 9,
+    "fixed_x_empty": 1,
+    "fixed_x_full": 1
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": 6,
+   "solution": {
+    "c": 6,
+    "max_integrality_violation": 0.0
+   },
+   "verification": {
+    "swings_by_direct_enumeration": [
+     12,
+     12,
+     12,
+     12,
+     12,
+     12,
+     12,
+     12,
+     6
+    ],
+    "gcd_normalized": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "target_pattern": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "matches_target": true,
+    "n_coalitions_enumerated": 512,
+    "witness": {
+     "c": 6
+    }
+   },
+   "outcome": "OPTIMAL",
+   "solver_status": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+   "solver_status_code": 0,
+   "reused_file": "code/milp_n8.py",
+   "reuse_method": "source text loaded, constants n / NV / c_idx / full-coalition literal and the solver time limit substituted, then exec'd unchanged",
+   "patch_diff": [
+    "--- code/milp_n8.py",
+    "+++ code/milp_n8.py (patched for n=9)",
+    "@@ -7,6 +7,5 @@",
+    " ",
+    "-n = 8",
+    "-NV = 257",
+    "-c_idx = 256",
+    "-",
+    "+n = 9",
+    "+NV = (1 << n) + 1",
+    "+c_idx = (1 << n)",
+    " I = []   # row indices",
+    "@@ -26,3 +25,3 @@",
+    " add_constraint({0: 1}, 0, 0)",
+    "-add_constraint({255: 1}, 1, 1)",
+    "+add_constraint({(1 << n) - 1: 1}, 1, 1)",
+    " "
+   ],
+   "patched_constants": {
+    "n": 9,
+    "NV": "(1 << n) + 1",
+    "c_idx": "(1 << n)",
+    "full_coalition_literal": "(1 << n) - 1",
+    "time_limit": 300
+   },
+   "c_bound_used": "c <= 100, exactly as hard-coded in code/milp_n8.py (bounds.ub[c_idx]=100)",
+   "raw_stdout_tail": "time: 0.7s  status: 0  message: Optimization terminated successfully. (HiGHS Status 7: Optimal)\nc = 6\nantichain (minimal winning):\nswings: [12, 12, 12, 12, 12, 12, 12, 12, 6]  (should be [12, 12, 12, 12, 12, 12, 12, 12, 6] )\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F2 --n 9 --timeout 300 --build-budget 300",
+   "wall_time_s": 1.9551046999986283,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F2",
+   "n": 10,
+   "build_time_s": 0.019313500029966235,
+   "solve_time_s": 2.6287662999820895,
+   "num_variables": 1025,
+   "num_constraints": 5133,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are exactly what code/milp_n8.py constructs (NV, len(lb))",
+    "coalition_variables": 1024,
+    "scale_c": 1,
+    "monotonicity_rows": 5120,
+    "swing_rows": 10,
+    "fixed_x_empty": 1,
+    "fixed_x_full": 1
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": 10,
+   "solution": {
+    "c": 10,
+    "max_integrality_violation": 2.55351295663786e-14
+   },
+   "verification": {
+    "swings_by_direct_enumeration": [
+     20,
+     20,
+     20,
+     20,
+     20,
+     20,
+     20,
+     20,
+     20,
+     10
+    ],
+    "gcd_normalized": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "target_pattern": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "matches_target": true,
+    "n_coalitions_enumerated": 1024,
+    "witness": {
+     "c": 10
+    }
+   },
+   "outcome": "OPTIMAL",
+   "solver_status": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+   "solver_status_code": 0,
+   "reused_file": "code/milp_n8.py",
+   "reuse_method": "source text loaded, constants n / NV / c_idx / full-coalition literal and the solver time limit substituted, then exec'd unchanged",
+   "patch_diff": [
+    "--- code/milp_n8.py",
+    "+++ code/milp_n8.py (patched for n=10)",
+    "@@ -7,6 +7,5 @@",
+    " ",
+    "-n = 8",
+    "-NV = 257",
+    "-c_idx = 256",
+    "-",
+    "+n = 10",
+    "+NV = (1 << n) + 1",
+    "+c_idx = (1 << n)",
+    " I = []   # row indices",
+    "@@ -26,3 +25,3 @@",
+    " add_constraint({0: 1}, 0, 0)",
+    "-add_constraint({255: 1}, 1, 1)",
+    "+add_constraint({(1 << n) - 1: 1}, 1, 1)",
+    " "
+   ],
+   "patched_constants": {
+    "n": 10,
+    "NV": "(1 << n) + 1",
+    "c_idx": "(1 << n)",
+    "full_coalition_literal": "(1 << n) - 1",
+    "time_limit": 300
+   },
+   "c_bound_used": "c <= 100, exactly as hard-coded in code/milp_n8.py (bounds.ub[c_idx]=100)",
+   "raw_stdout_tail": "time: 2.6s  status: 0  message: Optimization terminated successfully. (HiGHS Status 7: Optimal)\nc = 10\nantichain (minimal winning):\nswings: [20, 20, 20, 20, 20, 20, 20, 20, 20, 10]  (should be [20, 20, 20, 20, 20, 20, 20, 20, 20, 10] )\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F2 --n 10 --timeout 300 --build-budget 300",
+   "wall_time_s": 3.859396399988327,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F2",
+   "n": 12,
+   "build_time_s": 0.08305779995862395,
+   "solve_time_s": 655.4418238999788,
+   "num_variables": 4097,
+   "num_constraints": 24591,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are exactly what code/milp_n8.py constructs (NV, len(lb))",
+    "coalition_variables": 4096,
+    "scale_c": 1,
+    "monotonicity_rows": 24576,
+    "swing_rows": 12,
+    "fixed_x_empty": 1,
+    "fixed_x_full": 1
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": null,
+   "solution": null,
+   "verification": null,
+   "outcome": "TIMEOUT",
+   "solver_status": "Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is None)",
+   "solver_status_code": 1,
+   "reused_file": "code/milp_n8.py",
+   "reuse_method": "source text loaded, constants n / NV / c_idx / full-coalition literal and the solver time limit substituted, then exec'd unchanged",
+   "patch_diff": [
+    "--- code/milp_n8.py",
+    "+++ code/milp_n8.py (patched for n=12)",
+    "@@ -7,6 +7,5 @@",
+    " ",
+    "-n = 8",
+    "-NV = 257",
+    "-c_idx = 256",
+    "-",
+    "+n = 12",
+    "+NV = (1 << n) + 1",
+    "+c_idx = (1 << n)",
+    " I = []   # row indices",
+    "@@ -26,3 +25,3 @@",
+    " add_constraint({0: 1}, 0, 0)",
+    "-add_constraint({255: 1}, 1, 1)",
+    "+add_constraint({(1 << n) - 1: 1}, 1, 1)",
+    " "
+   ],
+   "patched_constants": {
+    "n": 12,
+    "NV": "(1 << n) + 1",
+    "c_idx": "(1 << n)",
+    "full_coalition_literal": "(1 << n) - 1",
+    "time_limit": 300
+   },
+   "c_bound_used": "c <= 100, exactly as hard-coded in code/milp_n8.py (bounds.ub[c_idx]=100)",
+   "raw_stdout_tail": "time: 655.4s  status: 1  message: Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is None)\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F2 --n 12 --timeout 300 --build-budget 300",
+   "wall_time_s": 656.737901299959,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F2",
+   "n": 14,
+   "build_time_s": 0.4103655999642797,
+   "solve_time_s": 300.1784757000278,
+   "num_variables": 16385,
+   "num_constraints": 114705,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are exactly what code/milp_n8.py constructs (NV, len(lb))",
+    "coalition_variables": 16384,
+    "scale_c": 1,
+    "monotonicity_rows": 114688,
+    "swing_rows": 14,
+    "fixed_x_empty": 1,
+    "fixed_x_full": 1
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": null,
+   "solution": null,
+   "verification": null,
+   "outcome": "TIMEOUT",
+   "solver_status": "Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is None)",
+   "solver_status_code": 1,
+   "reused_file": "code/milp_n8.py",
+   "reuse_method": "source text loaded, constants n / NV / c_idx / full-coalition literal and the solver time limit substituted, then exec'd unchanged",
+   "patch_diff": [
+    "--- code/milp_n8.py",
+    "+++ code/milp_n8.py (patched for n=14)",
+    "@@ -7,6 +7,5 @@",
+    " ",
+    "-n = 8",
+    "-NV = 257",
+    "-c_idx = 256",
+    "-",
+    "+n = 14",
+    "+NV = (1 << n) + 1",
+    "+c_idx = (1 << n)",
+    " I = []   # row indices",
+    "@@ -26,3 +25,3 @@",
+    " add_constraint({0: 1}, 0, 0)",
+    "-add_constraint({255: 1}, 1, 1)",
+    "+add_constraint({(1 << n) - 1: 1}, 1, 1)",
+    " "
+   ],
+   "patched_constants": {
+    "n": 14,
+    "NV": "(1 << n) + 1",
+    "c_idx": "(1 << n)",
+    "full_coalition_literal": "(1 << n) - 1",
+    "time_limit": 300
+   },
+   "c_bound_used": "c <= 100, exactly as hard-coded in code/milp_n8.py (bounds.ub[c_idx]=100)",
+   "raw_stdout_tail": "time: 300.2s  status: 1  message: Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is None)\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F2 --n 14 --timeout 300 --build-budget 300",
+   "wall_time_s": 301.87487080000574,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F2",
+   "n": 16,
+   "build_time_s": 1.965991600009147,
+   "solve_time_s": 407.94920339999953,
+   "num_variables": 65537,
+   "num_constraints": 524307,
+   "num_nonzeros": null,
+   "counts_breakdown": {
+    "note": "counts are exactly what code/milp_n8.py constructs (NV, len(lb))",
+    "coalition_variables": 65536,
+    "scale_c": 1,
+    "monotonicity_rows": 524288,
+    "swing_rows": 16,
+    "fixed_x_empty": 1,
+    "fixed_x_full": 1
+   },
+   "solver": "scipy.optimize.milp (HiGHS)",
+   "c": null,
+   "solution": null,
+   "verification": null,
+   "outcome": "TIMEOUT",
+   "solver_status": "Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is None)",
+   "solver_status_code": 1,
+   "reused_file": "code/milp_n8.py",
+   "reuse_method": "source text loaded, constants n / NV / c_idx / full-coalition literal and the solver time limit substituted, then exec'd unchanged",
+   "patch_diff": [
+    "--- code/milp_n8.py",
+    "+++ code/milp_n8.py (patched for n=16)",
+    "@@ -7,6 +7,5 @@",
+    " ",
+    "-n = 8",
+    "-NV = 257",
+    "-c_idx = 256",
+    "-",
+    "+n = 16",
+    "+NV = (1 << n) + 1",
+    "+c_idx = (1 << n)",
+    " I = []   # row indices",
+    "@@ -26,3 +25,3 @@",
+    " add_constraint({0: 1}, 0, 0)",
+    "-add_constraint({255: 1}, 1, 1)",
+    "+add_constraint({(1 << n) - 1: 1}, 1, 1)",
+    " "
+   ],
+   "patched_constants": {
+    "n": 16,
+    "NV": "(1 << n) + 1",
+    "c_idx": "(1 << n)",
+    "full_coalition_literal": "(1 << n) - 1",
+    "time_limit": 300
+   },
+   "c_bound_used": "c <= 100, exactly as hard-coded in code/milp_n8.py (bounds.ub[c_idx]=100)",
+   "raw_stdout_tail": "time: 407.9s  status: 1  message: Time limit reached. (HiGHS Status 13: model_status is Time limit reached; primal_status is None)\n",
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F2 --n 16 --timeout 300 --build-budget 300",
+   "wall_time_s": 411.36161019996507,
+   "stderr_tail": ""
+  },
+  {
+   "formulation": "F2",
+   "n": 18,
+   "outcome": "TIMEOUT",
+   "solver_status": "worker killed at the 690s wall-clock cap while the solver was still running; the model was built (so this is not a build failure) but the solver returned no status of its own",
+   "build_time_s": 8.834927499992773,
+   "solve_time_s": null,
+   "num_variables": 262145,
+   "num_constraints": 2359317,
+   "num_nonzeros": null,
+   "counts_breakdown": null,
+   "c": null,
+   "solution": null,
+   "verification": null,
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F2 --n 18 --timeout 300 --build-budget 300",
+   "wall_time_s": 690.3426115000038,
+   "killed_at_wall_cap": true,
+   "rerun": true
+  },
+  {
+   "formulation": "F2",
+   "n": 20,
+   "outcome": "BUILD_FAILED",
+   "solver_status": "MemoryError while building",
+   "build_time_s": 318.7313907999778,
+   "solve_time_s": null,
+   "num_variables": null,
+   "num_constraints": null,
+   "num_nonzeros": null,
+   "counts_breakdown": null,
+   "c": null,
+   "solution": null,
+   "verification": null,
+   "worker_cmd": "C:\\Python314\\python.exe code\\benchmark_formulations.py --one F2 --n 20 --timeout 300 --build-budget 300",
+   "wall_time_s": 328.4715780999977,
+   "stderr_tail": ""
+  }
+ ],
+ "agreement": [
+  {
+   "n": 6,
+   "formulations_with_witness": [
+    "F3",
+    "F2"
+   ],
+   "normalized_swing_vectors_by_direct_enumeration": {
+    "F3": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "F2": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ]
+   },
+   "all_match_target": true,
+   "pairwise_equal": true,
+   "scales_c": {
+    "F3": 4,
+    "F2": 4
+   }
+  },
+  {
+   "n": 7,
+   "formulations_with_witness": [
+    "F3",
+    "F2"
+   ],
+   "normalized_swing_vectors_by_direct_enumeration": {
+    "F3": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "F2": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ]
+   },
+   "all_match_target": true,
+   "pairwise_equal": true,
+   "scales_c": {
+    "F3": 6,
+    "F2": 10
+   }
+  },
+  {
+   "n": 8,
+   "formulations_with_witness": [
+    "F3",
+    "F2"
+   ],
+   "normalized_swing_vectors_by_direct_enumeration": {
+    "F3": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "F2": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ]
+   },
+   "all_match_target": true,
+   "pairwise_equal": true,
+   "scales_c": {
+    "F3": 8,
+    "F2": 8
+   }
+  },
+  {
+   "n": 9,
+   "formulations_with_witness": [
+    "F3",
+    "F2"
+   ],
+   "normalized_swing_vectors_by_direct_enumeration": {
+    "F3": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "F2": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ]
+   },
+   "all_match_target": true,
+   "pairwise_equal": true,
+   "scales_c": {
+    "F3": 6,
+    "F2": 6
+   }
+  },
+  {
+   "n": 10,
+   "formulations_with_witness": [
+    "F3",
+    "F2"
+   ],
+   "normalized_swing_vectors_by_direct_enumeration": {
+    "F3": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ],
+    "F2": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ]
+   },
+   "all_match_target": true,
+   "pairwise_equal": true,
+   "scales_c": {
+    "F3": 10,
+    "F2": 10
+   }
+  },
+  {
+   "n": 12,
+   "formulations_with_witness": [
+    "F3"
+   ],
+   "normalized_swing_vectors_by_direct_enumeration": {
+    "F3": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ]
+   },
+   "all_match_target": true,
+   "pairwise_equal": null,
+   "scales_c": {
+    "F3": 24
+   }
+  },
+  {
+   "n": 14,
+   "formulations_with_witness": [
+    "F3"
+   ],
+   "normalized_swing_vectors_by_direct_enumeration": {
+    "F3": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ]
+   },
+   "all_match_target": true,
+   "pairwise_equal": null,
+   "scales_c": {
+    "F3": 16
+   }
+  },
+  {
+   "n": 16,
+   "formulations_with_witness": [
+    "F3"
+   ],
+   "normalized_swing_vectors_by_direct_enumeration": {
+    "F3": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ]
+   },
+   "all_match_target": true,
+   "pairwise_equal": null,
+   "scales_c": {
+    "F3": 12
+   }
+  },
+  {
+   "n": 18,
+   "formulations_with_witness": [
+    "F3"
+   ],
+   "normalized_swing_vectors_by_direct_enumeration": {
+    "F3": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ]
+   },
+   "all_match_target": true,
+   "pairwise_equal": null,
+   "scales_c": {
+    "F3": 28
+   }
+  },
+  {
+   "n": 20,
+   "formulations_with_witness": [
+    "F3"
+   ],
+   "normalized_swing_vectors_by_direct_enumeration": {
+    "F3": [
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     2,
+     1
+    ]
+   },
+   "all_match_target": true,
+   "pairwise_equal": null,
+   "scales_c": {
+    "F3": 58
+   }
+  }
+ ]
+}

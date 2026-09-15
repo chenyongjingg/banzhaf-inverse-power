@@ -12,7 +12,10 @@ parentheses and re-checked independently where noted.
 
 The target ψⁿ = (2,…,2,1)/(2n−1) is not realizable by any weighted majority
 game on n voters for every 6 ≤ n ≤ 10. The certificate is conclusive because
-the search is run up to the classical weight bound W = 2^(n−1)
+the search is run up to the weight bound W = 2^(n−1): Muroga (1971, proof of
+Thm 9.3.2.1) gives an integer representation with 0 ≤ wᵢ ≤ αₙ (the largest
+determinant of an n×n 0–1 matrix), with αₙ = 9, 32, 56, 144, 320 ≤ 2^(n−1) for
+n = 6..10.  The bound is not uniform in n: α₁₁ = 1458 > 1024
 (`conj15_feas.py` standard model; `conj15_feas2.py` enhanced model that adds
 the (M′) mirror constraints — the enhanced model is required for n = 9, 10):
 
@@ -64,6 +67,32 @@ are the global optima over all weighted games at the conclusive weight bound.
   over n = 6,…,80.
 - `probe5_k1_coverage.py` — coverage rates of the (k,1) families over
   n = 6,…,80.
+
+### Cited in Section 11
+
+- `verify_U_proof.py` — the case decomposition of the proof of formula (U)
+  (Proposition 11): on random v(G,F) instances — monotone in the first pass
+  and unrestricted in the second — each of the three partial swing counts is
+  compared with the closed form the proof derives for it, and the three with
+  the brute-force total: 2670 player-instances over
+  n = 6..18 with Pairs(F) ⊆ G, and a further 2670 without it ((U) is an
+  identity for every (G,F); the hypothesis is used only for monotonicity),
+  0 mismatches in either pass.  The sweep is run in two parts — 40 random
+  instances per n for n = 6..11 (the canonical invocation) and 6 per n for
+  n = 12..18 — so that the larger n, whose games are brute-forced over up to
+  2^18 coalitions, stay affordable.
+
+- `certify_obs10.py` — Observation 10 decided exactly, over all simple games rather than only the
+  weighted ones: one Boolean per coalition, monotone, with the mirror constraints of the target
+  profile and the constraint that some $(n-1)$-set is losing. A losing $(n-1)$-set omits either a
+  non-special voter or the special one, and the symmetry group makes all choices within the first
+  case equivalent, so the two cases decide the observation for that n. Both are infeasible for every
+  n ≤ 19 (n = 6..10 in under a second each, n = 16 in about 85 s, n = 18 in about 5–6 min on
+  eight workers, n = 19 in about 11 min for case A and 6 min for case B on four, and again in about 13 / 9
+  min on six workers on a second machine);
+  the same model is feasible with the losing-set constraint dropped, and the verdicts are unchanged
+  with the symmetry break removed.  Usage: `python certify_obs10.py [nmin] [nmax] [timeout] [workers]
+  [--no-break]`.
 
 ### Supporting probes and checks
 

@@ -66,7 +66,7 @@ for n in range(4,13):
             print(f"A MISMATCH n={n} G={G}: brute={b} U={u}")
 print(f"Theorem 1 (F=empty) check: {tr} instances, {mism} mismatches")
 
-# Special case B: G = complement(E) -> Theorem 2 (threshold)
+# Special case B: G = complement(E) -> Theorem 3 (threshold)
 mism=0; tr=0
 for n in range(5,12):
     pairs=[(a,b) for a in range(n) for b in range(a+1,n)]
@@ -79,4 +79,4 @@ for n in range(5,12):
         tr+=1
         if b!=u:
             mism+=1; print(f"B MISMATCH n={n}")
-print(f"Theorem 2 (G=complement) check: {tr} instances, {mism} mismatches")
+print(f"Theorem 3 (G=complement) check: {tr} instances, {mism} mismatches")

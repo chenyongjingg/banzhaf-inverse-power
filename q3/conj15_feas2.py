@@ -6,12 +6,19 @@ for every pair of non-special voters i,j with w_i >= w_j (w_s strictly minimal, 
   |{T subseteq N\\{i,j,s} : q - w_s - w_i <= W(T) < q - w_s - w_j}| = 0.
 These are consequences of the exact hypothesis eta=(2c,...,2c,c) (Cor 20), so they are
 valid pruning constraints for the feasibility model.  Usage:
-  python conj15_feas2.py [n] [W] [timeout_s]
+  python conj15_feas2.py [n] [W] [timeout_s] [workers] [seed]
+
+The last two are optional and default to 8 workers and CP-SAT's own default seed,
+which is the configuration that produced the published n <= 10 verdicts.  A larger
+worker count is how the n = 11 and n = 12 runs use a bigger machine; the seed is
+exposed so that two machines can be checked against each other without either
+reproducing the other's search path.  Every run prints the configuration it used,
+so a log states its own provenance.
 """
 import sys, time
 from ortools.sat.python import cp_model
 
-def model_exists(n, W, timeout):
+def model_exists(n, W, timeout, workers=8, seed=None):
     t0 = time.time()
     m = cp_model.CpModel()
     N = 1 << n
@@ -83,23 +90,28 @@ def model_exists(n, W, timeout):
     m.Minimize(sum(w) + q)
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = timeout
-    solver.parameters.num_search_workers = 8
+    solver.parameters.num_search_workers = workers
+    if seed is not None:
+        solver.parameters.random_seed = seed
     status = solver.Solve(m)
     el = time.time()-t0
+    cfg = f"{n_mirror} mirror constraints, {workers} workers, seed {seed}"
     if status in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         print(f"n={n} W={W}: FEASIBLE! c={solver.Value(c)} q={solver.Value(q)} "
               f"w={[solver.Value(wi) for wi in w]} eta={[solver.Value(e) for e in eta]} "
-              f"[{el:.1f}s] ({n_mirror} mirror constraints)", flush=True)
+              f"[{el:.1f}s] ({cfg})", flush=True)
         return True
     elif status == cp_model.INFEASIBLE:
-        print(f"n={n} W={W}: INFEASIBLE [{el:.1f}s] ({n_mirror} mirror constraints)", flush=True)
+        print(f"n={n} W={W}: INFEASIBLE [{el:.1f}s] ({cfg})", flush=True)
         return False
     else:
-        print(f"n={n} W={W}: UNKNOWN (status={status}) [{el:.1f}s] ({n_mirror} mirror constraints)", flush=True)
+        print(f"n={n} W={W}: UNKNOWN (status={status}) [{el:.1f}s] ({cfg})", flush=True)
         return None
 
 if __name__ == "__main__":
     n = int(sys.argv[1]) if len(sys.argv) > 1 else 7
     W = int(sys.argv[2]) if len(sys.argv) > 2 else (1 << (n-1))
     timeout = int(sys.argv[3]) if len(sys.argv) > 3 else 600
-    model_exists(n, W, timeout)
+    workers = int(sys.argv[4]) if len(sys.argv) > 4 else 8
+    seed = int(sys.argv[5]) if len(sys.argv) > 5 else None
+    model_exists(n, W, timeout, workers, seed)

@@ -1,0 +1,9 @@
+  T=8: l1=0.116667 opt=True eta=[1, 1, 1, 1, 1, 1, 1, 1] w=[2, 2, 2, 2, 2, 2, 2, 1] q=1  [best]
+  ...40/200 done, 528s, best=0.116667 at T=8
+  T=60: l1=0.066667 opt=False eta=[6, 8, 8, 8, 8, 8, 8, 6] w=[2, 3, 3, 3, 3, 3, 3, 1] q=4  [best]
+  ...80/200 done, 1129s, best=0.066667 at T=60
+  ...120/200 done, 1729s, best=0.066667 at T=60
+  ...160/200 done, 2329s, best=0.066667 at T=60
+n=8 RESULT: best L1 = 0.06666667 at T=60 (opt=False)  n*L1=0.533333  1/n=0.125000
+  eta=[6, 8, 8, 8, 8, 8, 8, 6] w=[2, 3, 3, 3, 3, 3, 3, 1] q=4
+  NOTE: re-run 'python conj15_l1.py confirm 8 60 600' to certify the winning T as OPTIMAL

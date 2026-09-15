@@ -1,18 +1,28 @@
 # -*- coding: utf-8 -*-
 """Conjecture 15 exact-feasibility: does there exist a weighted majority game [q;w]
 whose Banzhaf swings are exactly (2c,...,2c,c) (= psi^n, special player = n)?
-Uses OR-Tools CP-SAT. Usage: python conj15_feas.py [n] [W] [timeout_s]
-Weight bound: minimal integer reps have w_i <= 2^(n-1) (classical), so W=2^(n-1) is conclusive.
+Uses OR-Tools CP-SAT. Usage: python conj15_feas.py [n] [W] [timeout_s] [workers] [seed]
+Weight bound: Muroga (1971, proof of Thm 9.3.2.1) gives an integer representation with
+0 <= w_i <= alpha_n, alpha_n = the largest determinant of an n x n 0-1 matrix, and
+alpha_n = 9, 32, 56, 144, 320 for n = 6..10 -- each <= 2^(n-1).  So W = 2^(n-1) is
+conclusive for n <= 10, the range the paper claims.  It is NOT conclusive at n = 11
+(alpha_11 = 1458 > 2^10 = 1024), which is why verdicts there are budgeted and are
+labelled Tier 3 in the manuscript.
+The last two arguments are optional and default to 8 workers and CP-SAT's own default
+seed, the configuration behind the published n <= 10 verdicts; larger worker counts
+let a bigger machine run the same model at n = 11 and beyond, and the seed is exposed
+so two machines can be compared without sharing a search path.  The verdict line
+prints the configuration, so a log carries its own provenance.
 """
 import sys, time
 from ortools.sat.python import cp_model
 
-def model_exists(n, W, timeout):
+def model_exists(n, W, timeout, workers=8, seed=None):
     t0 = time.time()
     m = cp_model.CpModel()
     N = 1 << n
     w = [m.NewIntVar(1, W, f"w{i}") for i in range(n)]
-    # special player n-1 strictly minimal (Corollary 19)
+    # special player n-1 strictly minimal (Corollary 6 of the manuscript)
     for i in range(n-1):
         m.Add(w[i] > w[n-1])
     # symmetry break: all non-special players have equal target swing (2c), so relabel
@@ -55,23 +65,29 @@ def model_exists(n, W, timeout):
     m.Minimize(sum(w) + q)
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = timeout
-    solver.parameters.num_search_workers = 8
+    solver.parameters.num_search_workers = workers
+    if seed is not None:
+        solver.parameters.random_seed = seed
     status = solver.Solve(m)
     el = time.time()-t0
+    cfg = f"{workers} workers, seed {seed}"
     if status in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         print(f"n={n} W={W}: FEASIBLE (a weighted game realizes psi^n!) c={solver.Value(c)} "
               f"q={solver.Value(q)} w={[solver.Value(wi) for wi in w]} "
-              f"eta={[solver.Value(e) for e in eta]} [{el:.1f}s]", flush=True)
+              f"eta={[solver.Value(e) for e in eta]} [{el:.1f}s] ({cfg})", flush=True)
         return True
     elif status == cp_model.INFEASIBLE:
-        print(f"n={n} W={W}: INFEASIBLE - no weighted game realizes psi^n [{el:.1f}s]", flush=True)
+        print(f"n={n} W={W}: INFEASIBLE - no weighted game realizes psi^n [{el:.1f}s] ({cfg})",
+              flush=True)
         return False
     else:
-        print(f"n={n} W={W}: UNKNOWN (status={status}) [{el:.1f}s]", flush=True)
+        print(f"n={n} W={W}: UNKNOWN (status={status}) [{el:.1f}s] ({cfg})", flush=True)
         return None
 
 if __name__ == "__main__":
     n = int(sys.argv[1]) if len(sys.argv) > 1 else 7
     W = int(sys.argv[2]) if len(sys.argv) > 2 else (1 << (n-1))
     timeout = int(sys.argv[3]) if len(sys.argv) > 3 else 600
-    model_exists(n, W, timeout)
+    workers = int(sys.argv[4]) if len(sys.argv) > 4 else 8
+    seed = int(sys.argv[5]) if len(sys.argv) > 5 else None
+    model_exists(n, W, timeout, workers, seed)

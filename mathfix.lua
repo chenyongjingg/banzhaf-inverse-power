@@ -106,6 +106,15 @@ end
 
 -- --- mathy detection ---------------------------------------------------------
 
+-- A URL is never mathematics, and the two collide on exactly one character: DOIs
+-- are full of "_", which is the subscript marker the scanner keys on.  Without this
+-- guard an autolink such as <https://doi.org/10.1007/978-3-662-00411-1_14> is sent
+-- to the math converter as one merged span, so it prints as italic letters with
+-- spaced minus signs (h t t p s : / / d o i . o r g ...) rather than as a URL.
+local function is_url(s)
+  return s:find("://", 1, true) ~= nil
+end
+
 local function contains_math_marker(s)
   if s:find("[%^_{}|]") then return true end
   for _, c in ipairs(uchars(s)) do
@@ -156,6 +165,7 @@ end
 -- commands hardcoded in the scanner (not in the mapping tables)
 CMD.vert = true
 CMD.setminus = true
+CMD["setminus"] = true  -- written by hand in the source as \setminus
 CMD["not"] = true   -- \not is a LaTeX primitive (used by ∌ → \not\ni)
 CMD.allowbreak = true   -- emitted after top-level \}, in math
 
@@ -307,6 +317,26 @@ local function convert_to_math(s)
         table.insert(out, "\\$"); i = i + 1
       elseif c == "|" then
         table.insert(out, "\\vert"); i = i + 1
+      elseif c == "\\" then
+        -- Backstop, currently unreachable.  A scan of the compiled AST shows
+        -- pandoc never leaves a "\letter" inside a Str: raw_tex lifts it to a
+        -- RawInline (which check_raw_inline guards), and a backslash before an
+        -- escapable character is consumed by the reader before any filter runs.
+        -- Kept because the failure it prevents -- a valid LaTeX command meaning
+        -- something else, e.g. `\S` printing a section sign where a set
+        -- difference was meant -- compiles with no error and no warning.  If a
+        -- future pandoc or a different markdown extension ever routes a command
+        -- here, it must fail loudly rather than be emitted silently.
+        local j, run = i + 1, ""
+        while (cs[j] or ""):match("%a") do
+          run = run .. cs[j]; j = j + 1
+        end
+        if run ~= "" and not CMD[run] then
+          error("mathfix: refusing to emit unknown LaTeX command \\" .. run ..
+                " inside math (it would compile but mean something else;" ..
+                " write the intended math explicitly as $...$)")
+        end
+        table.insert(out, "\\" .. run); i = j
       elseif c == " " then
         table.insert(out, "\\ "); i = i + 1
       else
@@ -324,6 +354,18 @@ end
 
 -- --- inline-list walker -------------------------------------------------------
 
+-- There is deliberately NO guard here on backslashes inside Str nodes.
+--
+-- A scan of the compiled AST shows that pandoc's `raw_tex` extension lifts every
+-- "\letter" in prose into a RawInline (Format "tex") node, never leaving one in
+-- a Str:  `N\S`, `*N\S*` and a table cell `N\S` all produce RawInline "\\S",
+-- and the only Str that ever contains a backslash is the control space `A\ B`,
+-- where pandoc has already consumed it (the Str is "A\160B").  A Str-level
+-- check therefore cannot fire and would be false assurance.  Raw TeX is guarded
+-- in check_raw_inline below; a backslash before a character pandoc *can* escape
+-- (`\(`, `\{`, `\%`) is gone before any filter runs and can only be caught at
+-- the source, by scripts/scan_backslashes.py.
+
 local function fix_inlines(inlines)
   local result, buf, mathing, pending = {}, {}, false, false
   local function flush()
@@ -339,7 +381,7 @@ local function fix_inlines(inlines)
   end
   for _, inl in ipairs(inlines) do
     if inl.t == "Str" then
-      if contains_math_marker(inl.text) then
+      if contains_math_marker(inl.text) and not is_url(inl.text) then
         if contains_cjk(inl.text) then
           -- CJK text mixed with math in one Str (ZH doc): keep the Chinese
           -- prose out of math mode, send only the non-CJK math runs to buf.
@@ -380,6 +422,37 @@ local function fix_inlines(inlines)
   return result
 end
 
+-- --- raw TeX inlines ----------------------------------------------------------
+
+-- The channel that actually carried the original defect, and the reason two
+-- earlier guards missed it.  Pandoc's `raw_tex` extension parses a backslash
+-- command in prose as RawInline (Format "tex"), NOT as a Str:
+--
+--     "S ∪ {i} ⊇ N\S for some edge"   -->   Str "N", RawInline tex "\\S ", ...
+--
+-- A RawInline is passed to LaTeX verbatim and never enters the math scanner, so
+-- both the Str-level guard and the math-mode guard are structurally blind to it.
+-- \S is a valid LaTeX command (the section sign), so nothing warns: the build is
+-- clean and the page prints "N§".  Raw TeX is therefore allowed only where it is
+-- deliberate and reviewed -- currently the longtable caption prefix -- and an
+-- unrecognised one fails the build instead of reaching the reader.
+local RAW_INLINE_OK = {
+  ["\\def\\LTcaptype{none}"] = true,   -- pandoc's longtable preamble
+  ["\\texttt"] = true,                 -- emitted by fix_code for script names
+}
+
+local function check_raw_inline(el)
+  local fmt = (el.format or ""):lower()
+  if fmt ~= "tex" and fmt ~= "latex" then return el end
+  for ok in pairs(RAW_INLINE_OK) do
+    if el.text:sub(1, #ok) == ok then return el end
+  end
+  error("mathfix: unchecked raw TeX inline " .. el.text:gsub("%s+$", "") ..
+        " -- it bypasses the math scanner and would compile while meaning " ..
+        "something else. Write the intended mathematics as $...$, or add the " ..
+        "construct to RAW_INLINE_OK after reviewing it")
+end
+
 -- --- filter handlers ----------------------------------------------------------
 
 -- --- code spans (script names) ----------------------------------------------
@@ -406,11 +479,12 @@ for _, t in ipairs({ "Para", "Plain", "Header", "Emph", "Strong", "Quoted",
   end
 end
 handlers["Code"] = fix_code
+handlers["RawInline"] = check_raw_inline
 
--- --- EJOR technical check: 1.5-line spacing --------------------------------
+-- --- 1.5-line spacing, as required at review -------------------------------
 -- Inject \usepackage{setspace} + \onehalfspacing into the generated preamble
 -- so that regenerating the manuscript from the markdown preserves the
--- journal's required 1.5-line spacing (setspace's \onehalfspacing yields a
+-- required 1.5-line spacing (setspace's \onehalfspacing yields a
 -- true 1.5 line height for 10/11/12 pt).  Applied via the pandoc
 -- 'header-includes' meta variable, which the default LaTeX template emits in
 -- the preamble before \begin{document}.
@@ -421,6 +495,100 @@ function handlers.Pandoc(doc)
     doc.meta["header-includes"] = pandoc.List{inc}
   else
     hdrs:insert(inc)
+  end
+  return doc
+end
+
+-- --- PDF document metadata (title / author) ---------------------------------
+-- Why this is needed: the title and byline live in a raw LaTeX block in the
+-- Markdown, not in pandoc metadata, so the default template emits
+-- \title{} / \author{} empty and the compiled PDF ships with /Title and /Author
+-- blank.  Every submission system and every reader's PDF viewer surfaces those
+-- two fields.
+--
+-- The values are DERIVED from the same raw block that produces the printed
+-- front matter -- deliberately not written out here.  A second hard-coded copy
+-- of the byline in this file would go stale the first time an author changes,
+-- which is exactly the failure the docx front block had one round ago.
+local pdf_title, pdf_author = nil, nil
+
+-- LaTeX-special characters that would break the injected \hypersetup if they
+-- ever appeared in a title or name.  Refuse loudly instead of emitting broken
+-- preamble: a build failure is recoverable, a silently mangled metadata field
+-- is not.  Accented letters and other non-ASCII are deliberately NOT listed --
+-- the document is compiled with xelatex and handles UTF-8 directly.
+local UNSAFE = "[%%#&_%^~$\\{}]"
+
+function handlers.RawBlock(el)
+  if not el.format:match("^%a*latex$") and not el.format:match("^tex$") then
+    return el
+  end
+  local s = el.text
+  if pdf_title == nil then
+    local t = s:match("\\title{(.-)}")
+    if t then pdf_title = t end
+  end
+  if pdf_author == nil then
+    local rest = s:match("\\author{(.*)")
+    if rest then
+      -- The printed front matter puts the affiliations after a \\ line break;
+      -- the names are everything before it.
+      local names = rest:match("^(.-)\\\\")
+      if names then
+        names = names:gsub("\\textsuperscript%s*{[^}]*}", "")
+        names = names:gsub("\\[a-zA-Z]+%s*", "")
+        names = names:gsub("[{}]", "")
+        names = names:gsub("%s+", " ")
+        names = names:gsub("^%s*,%s*", ""):gsub("%s*,%s*$", "")
+        if names ~= "" then pdf_author = names end
+      end
+    end
+  end
+  return el
+end
+
+function handlers.Pandoc(doc)
+  local inc = pandoc.RawInline("latex", "\\usepackage{setspace}\n\\onehalfspacing")
+  local hdrs = doc.meta["header-includes"]
+  if hdrs == nil then
+    doc.meta["header-includes"] = pandoc.List{inc}
+  else
+    hdrs:insert(inc)
+  end
+
+  -- This filter is shared by two builds that want opposite things.  The PDF path runs
+  -- it with FORMAT=latex over the raw-LaTeX front matter, and needs the metadata.  The
+  -- presentation-copy path (pipeline_reports/_make_docx.py) runs it with FORMAT=docx
+  -- over a source whose front matter _make_docx.py has ALREADY rewritten into plain
+  -- text -- so there is no \title{} to derive from, and a Word file has no PDF
+  -- metadata to set.  Only the LaTeX build is asked to produce it, and only there is
+  -- a missing derivation an error rather than a non-event.
+  if FORMAT ~= "latex" and FORMAT ~= "beamer" then
+    return doc
+  end
+  if pdf_title == nil or pdf_author == nil then
+    error("mathfix: could not derive \\title{}/\\author{} from the document "
+      .. "(title=" .. tostring(pdf_title) .. ", author=" .. tostring(pdf_author)
+      .. "); refusing to build a PDF with blank metadata")
+  end
+  for _, v in ipairs({pdf_title, pdf_author}) do
+    local bad = v:match(UNSAFE)
+    if bad then
+      error("mathfix: refusing to inject PDF metadata, unsafe LaTeX character "
+        .. string.format("%q", bad) .. " in " .. string.format("%q", v))
+    end
+  end
+  -- \AtBeginDocument, not a bare \hypersetup: header-includes is emitted before
+  -- the template loads hyperref, so calling \hypersetup here is an undefined
+  -- control sequence (G2 caught this on the first attempt).  Deferring to the
+  -- start of the document is order-independent.
+  local hs = "\\AtBeginDocument{\\hypersetup{pdftitle={" .. pdf_title
+    .. "}, pdfauthor={" .. pdf_author .. "}}}"
+  local hsinc = pandoc.RawInline("latex", hs)
+  if doc.meta["header-includes"] == nil then
+    doc.meta["header-includes"] = pandoc.List{hsinc}
+  else
+    doc.meta["header-includes"]:insert(hsinc)
   end
   return doc
 end

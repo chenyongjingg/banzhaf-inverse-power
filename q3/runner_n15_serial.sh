@@ -1,7 +1,7 @@
 #!/bin/bash
 # Serial downward sweep for n=15 minimal c (c=20 already certified FEASIBLE).
 # Stop at the first INFEASIBLE: then minimal c = that value + 2 (even).
-# Serial + 8 workers only: no CPU oversubscription, safe alongside StrongREJECT.
+# Serial + 8 workers only: no CPU oversubscription.
 cd "$(dirname "$0")" || exit 1
 for c in 18 16 14 12 10 8 6 4 2; do
   echo "--- testing c=$c ---"

@@ -64,4 +64,4 @@ from math import gcd
 from functools import reduce
 for n,G in [(6,[(0,1),(0,2),(1,5),(2,5),(3,4),(3,5),(4,5)]), (7,[])]:
     pass
-print("Also: with F=empty, G=E -> Theorem 1; with G=complement(E), F -> Theorem 2 (recovered by construction).")
+print("Also: with F=empty, G=E -> Theorem 1; with G=complement(E), F -> Theorem 3 (recovered by construction).")

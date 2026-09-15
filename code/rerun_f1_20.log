@@ -1,0 +1,3 @@
+[rerun F1 n=20] ...
+  -> TIMEOUT  build=4.303116799972486 solve=None vars=1048597 cons=2097169
+  spliced into the JSON; markdown re-rendered

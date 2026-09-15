@@ -1,0 +1,9 @@
+===== n=7 W=64 =====
+n=7 W=64: INFEASIBLE - no weighted game realizes psi^n [117.3s]
+exit=0
+===== n=8 W=128 =====
+n=8 W=128: UNKNOWN (status=CpSolverStatus.UNKNOWN) [1200.4s]
+exit=0
+===== n=9 W=256 =====
+exit=137
+===== n=10 W=512 =====

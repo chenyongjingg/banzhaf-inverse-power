@@ -1,0 +1,6 @@
+  T=7: l1=0.131868 eta=[1, 1, 1, 1, 1, 1, 1] w=[1, 1, 1, 1, 2, 1, 1] q=8  [best so far]
+  ...30/300 done, elapsed 210s, best=0.131868
+  T=45: l1=0.085470 eta=[5, 7, 7, 7, 7, 7, 5] w=[3, 4, 4, 6, 4, 4, 3] q=22  [best so far]
+  ...60/300 done, elapsed 433s, best=0.085470
+  ...90/300 done, elapsed 661s, best=0.085470
+  ...120/300 done, elapsed 883s, best=0.085470

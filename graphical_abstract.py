@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Graphical abstract for the C&OR submission.
+"""Graphical abstract.
 
-"Prescribed Banzhaf Power by Exact Computation: Closed-Form Realizations and
-Certified Weighted Obstructions"
+"Prescribed Banzhaf power: closed-form games, congruence conditions, and
+certified weighted obstructions"
 
 Elsevier spec for graphical abstracts: minimum 531 x 1328 px (h x w), i.e. a
 wide banner with aspect w/h = 2.5. This script renders a vector PDF plus a
@@ -62,7 +62,7 @@ def lane(x0, y0, x1, y1, fill, edge, title, body, mark, mark_color):
 card(3.2, 5.0, 30.0, 37.2)
 text(5.2, 34.6, "Inverse Banzhaf voting-design", size=8.2, weight="bold")
 text(5.2, 31.6, "given a target power distribution, construct a", size=5.9, color=INK_SUB)
-text(5.2, 29.9, "realizing rule — or certify that none exists", size=5.9, color=INK_SUB)
+text(5.2, 29.9, "realizing rule, or certify that none exists", size=5.9, color=INK_SUB)
 
 # mini bar chart of the egalitarian benchmark psi^n = (2,...,2,1)/(2n-1)
 bx0, bbase, bh = 5.4, 8.0, 16.0
@@ -89,7 +89,7 @@ text(36.2, 34.6, "Two rule classes, opposite verdicts", size=8.2, weight="bold")
 # green lane: simple games / W-family
 lane(36.2, 22.2, 62.0, 31.4, "#e7f3e7", GREEN,
      "Simple games  (W-family)",
-     "explicit realizing game for every n ≥ 6",
+     "explicit game for all n ≥ 6 and for (a,…,a,b)",
      "✓", GREEN)
 
 # red lane: weighted majority games
@@ -115,7 +115,7 @@ ax.add_patch(plt.Rectangle((74.8, lab_y - 0.75), 15.5, 1.5,
 text(91.6, lab_y, "L₁ ≈ 0.34–0.42", size=5.6, color=INK_SUB)
 
 lab_y = 22.6
-text(70.2, lab_y, "certified redesign", size=5.9, color=INK_SUB)
+text(70.2, lab_y, "best redesign", size=5.9, color=INK_SUB)
 ax.add_patch(plt.Rectangle((74.8, lab_y - 0.75), 4.6, 1.5,
              facecolor=GREEN, edgecolor="none", zorder=2))
 text(80.7, lab_y, "L₁ ≈ 0.11  (3× closer)", size=5.6, color=INK_SUB)

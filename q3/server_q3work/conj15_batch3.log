@@ -1,0 +1,6 @@
+===== n=9 W=256 (2h) =====
+n=9 W=256: UNKNOWN (status=CpSolverStatus.UNKNOWN) [7200.4s]
+exit=0
+===== n=10 W=512 (2h) =====
+n=10 W=512: UNKNOWN (status=CpSolverStatus.UNKNOWN) [7200.6s]
+exit=0
