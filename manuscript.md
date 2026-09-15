@@ -928,7 +928,6 @@ constraints). This MILP solves all instances up to n ≤ 64 in seconds to minute
 construction is an explicit closed form (Corollaries 14–17, Proposition 13), re-verified by formula
 (U). The scales c are:
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 n & n mod 7 & c & construction \\
@@ -943,9 +942,8 @@ n & n mod 7 & c & construction \\
 22 & 1 & 26 & tri(D3,f5,q3) \\
 23 & 2 & 18 & comp-edge \\
 24 & 3 & 36 & comp-edge \\
-\end{longtable}}
+\end{longtable}
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 n & n mod 7 & c & construction \\
@@ -960,7 +958,7 @@ n & n mod 7 & c & construction \\
 29 & 1 & 36 & tri(D3,f5,q2) \\
 30 & 2 & 24 & comp-edge \\
 31 & 3 & 48 & comp-edge \\
-\end{longtable}}
+\end{longtable}
 
 Here `tri(D,f,q)` and `comp-edge` are as in Proposition 13 / Section 10.1.
 
@@ -1104,7 +1102,6 @@ All verification scripts are included in the reproducible code package.
 
 ### Current coverage table
 
-{\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 n & method & c \\
@@ -1124,9 +1121,9 @@ n & method & c \\
 15 & deg+r & 20 \\
 16 & compl & 12 \\
 17 & compl & 24 \\
-\end{longtable}}
+\end{longtable}
 
-(18–75 see the tables in Proposition 12.) n ≡ 0, 2, 3, 6 (mod 7) are covered for infinitely many n
+(18–80 see Proposition 12.) n ≡ 0, 2, 3, 6 (mod 7) are covered for infinitely many n
 by Proposition 8; n ≡ 1, 4, 5 (mod 7) are covered by the triangle construction of Proposition 13
 and by Corollary 16 for the smallest values. **Every n ≥ 6 has a closed-form construction.**
 Full explicit (G, F) data for 6 ≤ n ≤ 80 are provided in machine-readable form in the companion

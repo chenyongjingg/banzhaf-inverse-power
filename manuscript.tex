@@ -1543,8 +1543,6 @@ up to n \(\le\) 64 in seconds to minutes; every resulting construction
 is an explicit closed form (Corollaries 14--17, Proposition 13),
 re-verified by formula (U). The scales c are:
 
-\(\{\)\def\LTcaptype{none} \% do not increment counter
-
 \begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 n & n mod 7 & c & construction \\
@@ -1561,10 +1559,6 @@ n & n mod 7 & c & construction \\
 24 & 3 & 36 & comp-edge \\
 \end{longtable}
 
-\(\}\)
-
-\(\{\)\def\LTcaptype{none} \% do not increment counter
-
 \begin{longtable}[]{@{}llll@{}}
 \toprule\noalign{}
 n & n mod 7 & c & construction \\
@@ -1580,8 +1574,6 @@ n & n mod 7 & c & construction \\
 30 & 2 & 24 & comp-edge \\
 31 & 3 & 48 & comp-edge \\
 \end{longtable}
-
-\(\}\)
 
 Here \texttt{tri(D,f,q)} and \texttt{comp-edge} are as in Proposition 13
 / Section 10.1.
@@ -1816,8 +1808,6 @@ All verification scripts are included in the reproducible code package.
 
 \subsubsection{Current coverage table}\label{current-coverage-table}
 
-\(\{\)\def\LTcaptype{none} \% do not increment counter
-
 \begin{longtable}[]{@{}lll@{}}
 \toprule\noalign{}
 n & method & c \\
@@ -1839,19 +1829,17 @@ n & method & c \\
 17 & compl & 24 \\
 \end{longtable}
 
-\(\}\)
-
-(18--75 see the tables in Proposition 12.) n \(\equiv\) 0, 2, 3, 6 (mod
-7) are covered for infinitely many n by Proposition 8; n \(\equiv\) 1,
-4, 5 (mod 7) are covered by the triangle construction of Proposition 13
-and by Corollary 16 for the smallest values. \textbf{Every n \(\ge\) 6
-has a closed-form construction.} Full explicit (G, F) data for 6 \(\le\)
-n \(\le\) 80 are provided in machine-readable form in the companion data
-file; entries for 41 \(\le\) n \(\le\) 80 are produced by the
-closed-form constructions of Proposition 8 (n \(\equiv\) 0, 2, 3, 6 (mod
-7)) and Proposition 13 (n \(\equiv\) 1, 4, 5 (mod 7)), and every entry
-(6 \(\le\) n \(\le\) 80) is re-verified by direct enumeration of the
-swing counts (equal to \(\psi^n,\) i.e. \((2c,\dots,2c,c))\) and of the
+(18--80 see Proposition 12.) n \(\equiv\) 0, 2, 3, 6 (mod 7) are covered
+for infinitely many n by Proposition 8; n \(\equiv\) 1, 4, 5 (mod 7) are
+covered by the triangle construction of Proposition 13 and by Corollary
+16 for the smallest values. \textbf{Every n \(\ge\) 6 has a closed-form
+construction.} Full explicit (G, F) data for 6 \(\le\) n \(\le\) 80 are
+provided in machine-readable form in the companion data file; entries
+for 41 \(\le\) n \(\le\) 80 are produced by the closed-form
+constructions of Proposition 8 (n \(\equiv\) 0, 2, 3, 6 (mod 7)) and
+Proposition 13 (n \(\equiv\) 1, 4, 5 (mod 7)), and every entry (6
+\(\le\) n \(\le\) 80) is re-verified by direct enumeration of the swing
+counts (equal to \(\psi^n,\) i.e. \((2c,\dots,2c,c))\) and of the
 monotonicity condition Pairs(F) \(\subseteq\) G.
 
 \subsubsection{Open problems}\label{open-problems}

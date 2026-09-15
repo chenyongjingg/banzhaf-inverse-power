@@ -257,7 +257,7 @@
       ],
       "year": 1946,
       "identifiers": {
-        "doi": "10.1111/j.2397-2335.1946.tb04638.x",
+        "doi": "10.2307/2981392",
         "pmid": "",
         "pmcid": "",
         "isbn": "",
@@ -392,6 +392,55 @@
         "source_opened": false,
         "verified_by": "Claude web cross-check via zbMATH / publisher DOI record (2026-09-13)",
         "verified_on": "2026-09-13"
+      }
+    },
+    {
+      "evidence_id": "E017",
+      "source_type": "journal_article",
+      "title": "Trading transforms of non-weighted simple games and integer weights of weighted simple games",
+      "authors": [
+        "Kawana, A.",
+        "Matsui, T."
+      ],
+      "year": 2022,
+      "identifiers": {
+        "doi": "10.1007/s11238-021-09831-2",
+        "pmid": "",
+        "pmcid": "",
+        "isbn": "",
+        "url": ""
+      },
+      "locator": "Theory and Decision 93(1), 131–150",
+      "confidentiality": "public",
+      "verification": {
+        "status": "verified",
+        "source_opened": false,
+        "verified_by": "Claude web cross-check via Crossref DOI record / OEIS page (2026-09-15)",
+        "verified_on": "2026-09-15"
+      }
+    },
+    {
+      "evidence_id": "E018",
+      "source_type": "database",
+      "title": "Sequence A003432: Largest determinant of an n x n (0,1)-matrix",
+      "authors": [
+        "OEIS Foundation Inc."
+      ],
+      "year": 2024,
+      "identifiers": {
+        "doi": "",
+        "pmid": "",
+        "pmcid": "",
+        "isbn": "",
+        "url": "https://oeis.org/A003432"
+      },
+      "locator": "The On-Line Encyclopedia of Integer Sequences",
+      "confidentiality": "public",
+      "verification": {
+        "status": "verified",
+        "source_opened": false,
+        "verified_by": "Claude web cross-check via Crossref DOI record / OEIS page (2026-09-15)",
+        "verified_on": "2026-09-15"
       }
     }
   ]
