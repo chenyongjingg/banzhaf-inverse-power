@@ -603,7 +603,8 @@ consideration cannot cover n.
    and Corollary 14, **every n ≥ 6 admits an explicit closed form** (Corollary 17).
 
 Representative W-family instances (hard residue classes; c = scale factor). All are explicit closed
-forms, re-verified by direct swing enumeration against ψⁿ (full data in the companion package):
+forms, each re-verified to have Bz(v) = ψⁿ by counting swings directly from the game definition
+rather than through (U) (full data in the companion package):
 
 | n | n mod 7 | c | edges | triples | construction |
 |---|---------|----|----|----|-------------|

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Cross-check every c-value claimed in the manuscript against the authoritative
 appendix-data-n80.json (the paper's own machine-readable dataset, re-verified by
-direct swing enumeration).
+counting swings directly from the game definition rather than through (U)).
 
 Deterministic, offline. Prints PASS/FAIL per check; exit code 0 iff all pass.
 
