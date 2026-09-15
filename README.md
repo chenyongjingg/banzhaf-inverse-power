@@ -65,7 +65,7 @@ All three are offline and exit non-zero on any mismatch.
 
 | File | Role |
 |---|---|
-| `data/appendix-data-n80.json` | **Authoritative**: minimal c and an explicit realizing graph for every n = 6..80, re-verified by direct swing enumeration |
+| `data/appendix-data-n80.json` | **Authoritative**: an explicit realizing graph and a scale c for every n = 6..80, each re-verified against ψⁿ and the monotonicity condition Pairs(F) ⊆ G (`code/reproduce_all.py`). Minimality of c is certified for n = 6..10 only; for larger n it is an upper bound, and minimality is an open problem (§11, Open problem 2) |
 | `data/appendix-data.json` | Earlier-generation dataset, superseded by the n80 file |
 | `data/appendix-solutions.md` | Human-readable appendix of realizing constructions |
 | `data/benchmark_formulations.json` | §10.4: every field of the three-formulation benchmark |

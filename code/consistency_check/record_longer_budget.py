@@ -25,7 +25,10 @@ idempotent: run it again after a new measurement and the block is rebuilt from t
     python code/consistency_check/record_longer_budget.py [--check]
 
 `--check` reports whether the recorded numbers still match the logs and exits non-zero if
-not, without writing.
+not, without writing.  It compares content, not filesystem metadata: the `when` field of a
+Section 7 entry is derived from that log's mtime, so it is excluded from the comparison --
+otherwise unpacking the archive, which rewrites mtimes, would report STALE on a package
+whose numbers all still match.  See the note in `main` for the measurement.
 """
 import json
 import re
@@ -151,7 +154,26 @@ def main():
             return 1
 
     if check:
-        same = payload["meta"].get("longer_budget_reruns") == entries
+        # `when` on a Section 7 entry is derived from the LOG FILE'S MTIME (see
+        # parse_sec7_log).  An mtime is filesystem metadata, not content: unpacking the
+        # shipped archive rewrites it, so a comparison that includes it reports STALE on a
+        # fresh extraction while every number still matches.  Measured on the shipped
+        # package: with the log and the JSON byte-identical to the tree's, a copy's
+        # mtime alone turned MATCHES THE LOGS into STALE, and restoring only the mtime --
+        # content untouched -- turned it back.  The field is still recorded, because it is
+        # useful provenance, but --check compares substance.
+        #
+        # Only the Section 7 entries are exempt.  An F2 entry's `when` is parsed out of
+        # the log's own text ("=== n=.. budget=..s at <ISO> ==="), so it is content and is
+        # still compared.
+        def comparable(e):
+            e = dict(e)
+            if e.get("configuration_key") == "milp_verify":
+                e.pop("when", None)
+            return e
+
+        same = ([comparable(x) for x in payload["meta"].get("longer_budget_reruns", [])]
+                == [comparable(x) for x in entries])
         print("LONGER-BUDGET RECORD: %s" % ("MATCHES THE LOGS" if same else "STALE"))
         return 0 if same else 1
 
