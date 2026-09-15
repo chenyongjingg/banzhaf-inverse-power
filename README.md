@@ -19,7 +19,7 @@ requires network access.
 | `manuscript.pdf` / `.md` / `.tex` | The manuscript (PDF, Markdown source, LaTeX) |
 | `mathfix.lua` | Pandoc Lua filter that typesets the mathematics |
 | `graphical_abstract.pdf` / `.png` / `.py` | Graphical abstract and the script that draws it |
-| `source_manifest.json` | The 16 references (E001–E016), each with a verification record |
+| `source_manifest.json` | The 18 references (E001–E018), each with a verification record |
 | `code/` | 93 Python scripts — constructions, MILP/CP-SAT models, verification, the formulation benchmark |
 | `q3/` | Weighted-infeasibility experiments (§9) and their server run logs |
 | `data/` | Result datasets (see below) |
