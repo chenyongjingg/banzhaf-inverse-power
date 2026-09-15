@@ -27,6 +27,7 @@ def _resolve(name):
 APPENDIX = _resolve("appendix-data-n80.json")
 EN = PAPER / "manuscript.md"
 ZH = PAPER / "manuscript_zh.md"
+SOLUTIONS = _resolve("appendix-solutions.md")
 
 
 def load_appendix():
@@ -40,6 +41,118 @@ def load_appendix():
         c = v["c"] if isinstance(v, dict) and "c" in v else v
         out[n] = int(c)
     return out
+
+
+def load_games():
+    """The full (c, G, F, method) record per n, for checking the appendix file's quotations."""
+    raw = json.loads(APPENDIX.read_text(encoding="utf-8"))
+    games = {}
+    for k, v in raw.items():
+        G = {(1 << a) | (1 << b) for a, b in v["G"]}
+        F = {(1 << a) | (1 << b) | (1 << c) for a, b, c in v["F"]}
+        games[int(k)] = (int(v["c"]), G, F, v.get("method", ""))
+    return games
+
+
+def _cells(line):
+    return [c.strip() for c in line.strip().strip("|").split("|")]
+
+
+def parse_solutions_summary(text):
+    """(n, c, |G|, |F|, method) from the summary table of `appendix-solutions.md`."""
+    rows, lines = [], text.splitlines()
+    for idx, ln in enumerate(lines):
+        if re.match(r"\s*\|\s*n\s*\|\s*n mod 7\s*\|\s*c\s*\|", ln) and "method" in ln:
+            for j in range(idx + 1, len(lines)):
+                if not re.match(r"\s*\|", lines[j]):
+                    break
+                cells = _cells(lines[j])
+                if len(cells) != 6:
+                    continue
+                try:
+                    n, c = int(cells[0]), int(cells[2])
+                    nG, nF = int(cells[3].strip("|")), int(cells[4].strip("|"))
+                except ValueError:
+                    continue  # the header row itself, or a separator
+                rows.append((n, c, nG, nF, cells[5]))
+            break
+    return rows
+
+
+def parse_solutions_listings(text):
+    """The explicit games printed for five values of n, as {n: (c, method, G, F)}."""
+    out = {}
+    for chunk in text.split("### n = ")[1:]:
+        head, _, body = chunk.partition("\n")
+        m = re.match(r"(\d+) \(c = (\d+), (.+)\)\s*$", head)
+        g = re.search(r"^G: (\[.*\])$", body, re.M)
+        f = re.search(r"^F: (\[.*\])$", body, re.M)
+        if not (m and g and f):
+            continue
+        G = {(1 << a) | (1 << b) for a, b in json.loads(g.group(1))}
+        F = {(1 << a) | (1 << b) | (1 << d) for a, b, d in json.loads(f.group(1))}
+        out[int(m.group(1))] = (int(m.group(2)), m.group(3), G, F)
+    return out
+
+
+def check_solutions(games, text):
+    """`appendix-solutions.md` against the dataset it prints.
+
+    Both its summary table and its five explicit game listings are quotations of
+    appendix-data-n80.json.  Until 2026-09-15 neither was compared to it: this verifier read
+    c-values out of the *manuscripts*, so the appendix file could quote a superseded generation
+    of the dataset and every gate still passed.  It did -- the n = 11 row printed c = 16,
+    |G| = 28 where the dataset has c = 14, |G| = 22, and the n = 11 and n = 22 listings were
+    the older games.  The games it printed were real and did realize psi^n, so no number was a
+    lie; what was wrong is that two shipped surfaces described different games for the same n.
+    """
+    bad = []
+    rows = parse_solutions_summary(text)
+    listings = parse_solutions_listings(text)
+
+    for n, c, nG, nF, method in rows:
+        if n not in games:
+            bad.append(f"summary table: n={n} is not in the dataset")
+            continue
+        wc, G, F, wm = games[n]
+        if (c, nG, nF, method) != (wc, len(G), len(F), wm):
+            bad.append(f"summary table n={n}: prints c={c}, |G|={nG}, |F|={nF}, method={method!r}; "
+                       f"dataset has c={wc}, |G|={len(G)}, |F|={len(F)}, method={wm!r}")
+
+    for n, (c, method, G, F) in sorted(listings.items()):
+        if n not in games:
+            bad.append(f"listing: n={n} is not in the dataset")
+            continue
+        wc, wG, wF, wm = games[n]
+        if G != wG or F != wF:
+            extra_g, miss_g = sorted(G - wG)[:4], sorted(wG - G)[:4]
+            bad.append(f"listing n={n}: the game printed is not the dataset's -- "
+                       f"{len(G - wG)} edge(s) not in the dataset, {len(wG - G)} missing"
+                       + (f"; first extra {extra_g}, first missing {miss_g}"
+                          if extra_g or miss_g else ""))
+        if c != wc or method != wm:
+            bad.append(f"listing n={n}: prints c={c}, method={method!r}; dataset has "
+                       f"c={wc}, method={wm!r}")
+
+    # Coverage, so that a table quietly reduced to the rows that happen to agree is a failure.
+    if rows and {r[0] for r in rows} != set(games):
+        missing = sorted(set(games) - {r[0] for r in rows})
+        extra = sorted({r[0] for r in rows} - set(games))
+        bad.append(f"summary table covers {len(rows)} values of n, the dataset has {len(games)}"
+                   f" (missing {missing[:6]}, unexpected {extra[:6]})")
+    if not rows:
+        bad.append("no summary table found in appendix-solutions.md")
+    if not listings:
+        bad.append("no explicit game listings found in appendix-solutions.md")
+
+    if bad:
+        print(f"[FAIL] appendix-solutions.md vs appendix-data-n80.json: {len(bad)} mismatch(es)")
+        for b in bad[:12]:
+            print("   ", b)
+        return bad
+    print(f"[PASS] appendix-solutions.md: summary table ({len(rows)} rows) and "
+          f"{len(listings)} game listings all match appendix-data-n80.json")
+    return []
 
 
 def check(name, pairs, appendix):
@@ -121,6 +234,12 @@ def parse_narrative_claims(text):
 
 
 def main():
+    # An explicit path is accepted for the appendix file so that the self-test can run this
+    # checker over a deliberately corrupted copy; the gate calls it with no argument.
+    sol_path = SOLUTIONS
+    if "--solutions" in sys.argv:
+        sol_path = Path(sys.argv[sys.argv.index("--solutions") + 1])
+
     appendix = load_appendix()
     en = EN.read_text(encoding="utf-8")
     zh = ZH.read_text(encoding="utf-8") if ZH.exists() else None
@@ -140,6 +259,12 @@ def main():
         all_bad += check("ZH narrative c= claims", parse_narrative_claims(zh), appendix)
     else:
         print("[SKIP] ZH mirrors: manuscript_zh.md not present (EN-only package)")
+
+    # --- the appendix prose file against the dataset it prints --------------
+    if sol_path.exists():
+        all_bad += check_solutions(load_games(), sol_path.read_text(encoding="utf-8"))
+    else:
+        all_bad.append(f"appendix-solutions.md not found at {sol_path}")
 
     # --- reported range sanity ---------------------------------------------
     vals = sorted(appendix)
