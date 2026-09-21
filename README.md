@@ -22,6 +22,7 @@ requires network access.
 | `source_manifest.json` | The 18 references (E001–E018), each with a verification record |
 | `code/` | 93 Python scripts — constructions, MILP/CP-SAT models, verification, the formulation benchmark |
 | `q3/` | Weighted-infeasibility experiments (§9) and their server run logs |
+| `q3/recheck/` | Raw logs of an independent re-run of the small-scale certificates on a second machine, including the runs that went wrong and the corrections that superseded them |
 | `data/` | Result datasets (see below) |
 | `scripts/` | The checkers that verify the paper's numbers and reproduce the case study |
 
@@ -42,7 +43,9 @@ enumeration.
 - **§9 weighted infeasibility (ψⁿ is not realizable by a weighted majority game, n = 6..10).**
   `python q3/conj15_feas.py` (n ≤ 8) and `python q3/conj15_feas2.py` (n = 9, 10; the enhanced
   model with (M′) mirror constraints). The weight bound W = 2^(n−1) makes INFEASIBLE
-  conclusive. Run scripts and server logs are in `q3/`.
+  conclusive. Run scripts and server logs are in `q3/`. The small-scale certificates were
+  also re-run independently on a second machine; the unedited logs, the two instrument
+  errors those runs exposed, and the runs that superseded them are in `q3/recheck/`.
 - **§10.4 formulation benchmark.** `python code/benchmark_formulations.py` runs the three
   formulations (direct weight-space, general monotone, compressed W-family) on n = 6..20 under
   one 300 s solver limit and writes `data/benchmark_formulations.json`. The witness check is
