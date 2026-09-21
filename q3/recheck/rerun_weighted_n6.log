@@ -1,0 +1,52 @@
+### WEIGHTED_ENUM RERUN START 2026-09-21T11:39:11Z
+### cmd: weighted_enum.py 6 40
+n=6 cap=40: 7947963 weight vectors
+  merged 2600 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+  merged 2607 distinct so far
+TOTAL distinct labeled weighted games = 2607
+  valid (empty coalition losing)       = 2606
+  unlabeled (S6 iso classes)          = 1111  (known n=6: 1111)
+BEST L1 to psi^n = 0.1136363636
+  swings = [6, 6, 6, 6, 4, 4]
+  total swings = 32
+  winning-mask = 16753531353454116864
+### rc=0
+### cmd: probe3_weighted_n6.py
+cap=20: labeled weighted games=1111, unlabeled (S6)=1111  (known n=6 unlabeled=1111, Kurz-Napel 2014 Table 1 #W(6))
+  L1=0.11363636  swings=[6, 6, 6, 6, 4, 4]  total=32
+  L1=0.11363636  swings=[6, 6, 6, 6, 4, 4]  total=32
+  L1=0.12727273  swings=[11, 11, 11, 9, 9, 9]  total=60
+  L1=0.12727273  swings=[11, 11, 11, 9, 9, 9]  total=60
+  L1=0.12918660  swings=[9, 7, 7, 7, 7, 1]  total=38
+### rc=0
+### END 2026-09-21T11:49:43Z

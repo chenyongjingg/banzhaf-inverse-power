@@ -116,6 +116,15 @@ are the global optima over all weighted games at the conclusive weight bound.
 `run_*.sh` and `runner_*.sh` are command-line drivers for the individual
 experiments above.
 
+## Re-run evidence
+
+`recheck/` holds the raw logs of an independent re-run of the numbers above on a
+second machine, plus a self-contained re-derivation of Theorem 1's formula
+(`recheck/recheck_t1_dualsem.py`). The logs are reproduced unedited, including
+two runs whose *instrument* was wrong and which are superseded by later runs in
+the same directory; `recheck/README.md` records, per log, what it backs and what
+it does not.
+
 ## Dependencies
 
 Python 3, OR-Tools CP-SAT, HiGHS. All scripts are deterministic; run times are

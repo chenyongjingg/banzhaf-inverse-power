@@ -1,0 +1,7 @@
+### RERUN START 2026-09-21T11:33:05Z
+### host python: 3.14.4  ortools: 9.15.6755
+### cmd: conj15_feas.py 6 32 900 8
+n=6 W=32: INFEASIBLE - no weighted game realizes psi^n [2.7s] (8 workers, seed None)
+### cmd: conj15_feas.py 8 128 2400 8
+n=8 W=128: INFEASIBLE - no weighted game realizes psi^n [1781.4s] (8 workers, seed None)
+### RERUN END 2026-09-21T12:02:52Z
