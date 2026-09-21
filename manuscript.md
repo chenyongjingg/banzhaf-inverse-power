@@ -107,7 +107,7 @@ Thus Bz(v) = ψⁿ iff β(v) is proportional to (2,…,2,1), i.e., iff n−1 pla
 For a graph G on vertex set N with edge set E, consider the simple game v_G whose minimal winning
 coalitions are exactly the complements of the edges of G:
   v_G(S) = 1  ⟺  S ⊇ N\{a,b} for some edge {a,b} ∈ E.
-Equivalently, a coalition is winning iff it misses no edge of G. We prove:
+Equivalently, a coalition is winning iff the voters outside it are contained in some edge of G. We prove:
 
 **Theorem 1.** Let G be a graph on n vertices with edge set E. Suppose (i) G has no isolated
 vertices, and (ii) G is not a star (no vertex is incident with every edge). Then the Banzhaf swing
@@ -132,14 +132,15 @@ Summing gives β_i(v_G) = |E| + (n−1) − 2·deg_G(i). ∎
 degree d + c/2, and if |E| + (n−1) − 2d = 2c, then Bz(v_G) = ψⁿ. Since 2|E| = nd + c/2, the
 existence of such a graph is equivalent to the solvability of
   7c = d(2n−8) + 4(n−1)              (3)
-in positive integers d, c with 0 ≤ d ≤ n−2 and d + c/2 ≤ n−1, together with the graphicality of
+in positive integers d, c with 1 ≤ d ≤ n−2 and d + c/2 ≤ n−1, together with the graphicality of
 the degree sequence (d,…,d, d+c/2) (Erdős & Gallai 1960).
 
-For 6 ≤ n ≤ 18, equation (3) admits such a solution exactly for n ∈ {6, 7, 9, 13, 14, 16, 17}.
-For n ≡ 4 (mod 7) there is no solution at all; for n ∈ {8, 10, 12, 15} the required exceptional
-degree exceeds n−1. Hence the complement-of-edges family alone does **not** cover all n, which is
-consistent with the conjecture requiring a genuinely different construction for the remaining
-values.
+For 6 ≤ n ≤ 18, equation (3) admits such a solution exactly for n ∈ {6, 7, 9, 13, 14, 16, 17}. For
+n ≡ 4 (mod 7) it has no solution at all; at n = 8 its only solution has d = 0, which the absence of
+isolated vertices forbids (the degree sequence is not graphical); and at each of n = 10, 12 and 15
+the exceptional degree of the unique admissible solution exceeds n−1. Hence the complement-of-edges
+family alone does **not** cover all n, which is consistent with the conjecture requiring a
+genuinely different construction for the remaining values.
 
 The condition (3) is solvable for *infinitely many* n: for n ≤ 30 the solvable values are
   6, 7, 9, 13, 14, 16, 17, 20, 21, 23, 24, 27, 28, 30, …
