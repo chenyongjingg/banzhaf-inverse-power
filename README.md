@@ -1,6 +1,7 @@
 # Prescribed Banzhaf power: closed-form games, congruence conditions, and certified weighted obstructions
 
-Companion repository for the paper of the same name.
+Companion repository: datasets, models, and run logs for the inverse Banzhaf power project.
+The manuscript itself is not distributed here (see **What is not here**).
 
 **Authors.** Yongjin Chen <sup>a</sup> · Ziying Xue <sup>b</sup> · Songze Zhu <sup>a,\*</sup>
 
@@ -8,19 +9,16 @@ Companion repository for the paper of the same name.
 <sup>b</sup> School of Investigation, People's Public Security University of China, Beijing 100038, China
 <sup>\*</sup> Corresponding author: 20196846@ppsuc.edu.cn
 
-This repository holds the manuscript, the machine-readable datasets, and every script that
-reproduces a numerical claim in the paper. It is self-contained and deterministic: no step
-requires network access.
+This repository holds the machine-readable datasets and every script that reproduces a numerical
+claim in the work. It is self-contained and deterministic: no step requires network access.
 
 ## Layout
 
 | Path | Contents |
 |---|---|
-| `manuscript.pdf` / `.md` / `.tex` | The manuscript (PDF, Markdown source, LaTeX) |
-| `mathfix.lua` | Pandoc Lua filter that typesets the mathematics |
 | `graphical_abstract.pdf` / `.png` / `.py` | Graphical abstract and the script that draws it |
 | `source_manifest.json` | The 18 references (E001–E018), each with a verification record |
-| `code/` | 93 Python scripts — constructions, MILP/CP-SAT models, verification, the formulation benchmark |
+| `code/` | 87 Python scripts — constructions, MILP/CP-SAT models, verification, the formulation benchmark |
 | `q3/` | Weighted-infeasibility experiments (§9) and their server run logs |
 | `q3/recheck/` | Raw logs of an independent re-run of the small-scale certificates on a second machine, including the runs that went wrong and the corrections that superseded them |
 | `data/` | Result datasets (see below) |
@@ -28,7 +26,7 @@ requires network access.
 
 ## Reproducing the claims
 
-Every numerical claim in the manuscript is checked against `data/appendix-data-n80.json`, the
+Every numerical claim in the work is checked against `data/appendix-data-n80.json`, the
 authoritative dataset covering n = 6..80 whose swing vectors were re-verified by direct
 enumeration.
 
@@ -58,11 +56,13 @@ enumeration.
 
 | Script | Purpose |
 |---|---|
-| `scripts/verify_appendix_manuscript.py` | every c-value claimed in the manuscript (tables and narrative) vs `data/appendix-data-n80.json` |
-| `scripts/verify_benchmark_manuscript.py` | every number in the §10.4 tables, and the rerun times quoted in its prose, vs `data/benchmark_formulations.json` |
-| `scripts/case_study_eu.py` | reproduces every §12 number |
+| `code/reproduce_all.py` | the appendix chain check: for every n = 6..80, the shipped data satisfy Pairs(F) ⊆ G and deg_G(i) + r_i = D with the special player c/2 above it, whereupon (U) returns c·(2,…,2,1) |
+| `code/general_target_family.py` | Theorem 2: builds each realizing graph by Havel–Hakimi and confirms the swing vector by enumerating all 2ⁿ coalitions |
+| `scripts/case_study_eu.py` | reproduces every EU Council case-study number |
 
-All three are offline and exit non-zero on any mismatch.
+These are offline and exit non-zero on any mismatch. The two checkers that cross-read the
+manuscript's own prose and tables were removed along with the manuscript itself (see
+**What is not here**); the claim-to-script mapping above is the part that does not depend on it.
 
 ## Data files
 
@@ -73,38 +73,22 @@ All three are offline and exit non-zero on any mismatch.
 | `data/appendix-solutions.md` | Human-readable appendix of realizing constructions |
 | `data/benchmark_formulations.json` | §10.4: every field of the three-formulation benchmark |
 
-## Rebuilding the manuscript
-
-`manuscript.tex` is included, so the PDF can be rebuilt without pandoc:
-
-```
-xelatex manuscript.tex
-xelatex manuscript.tex
-```
-
-To regenerate `manuscript.tex` from `manuscript.md` the way it was produced:
-
-```
-pandoc manuscript.md --lua-filter mathfix.lua -s \
-  --pdf-engine=xelatex -V mainfont="Latin Modern Roman" -o manuscript.tex
-```
-
-The title and author block live in `manuscript.md` as raw LaTeX, so no `-M title` is needed.
-
-Two typesetting hazards are worth knowing if you edit the source, because both produce a
-completely clean LaTeX log while printing the wrong mathematics. A backslash in the prose can
-be silently eaten by pandoc (`N\({a,b} ∪ {i})` prints as `N ({a,b} ∪ {i})`, losing the
-set-difference operator), and a hand-written `N\S` prints a section sign. `mathfix.lua`
-refuses stray raw TeX at build time, which catches the second.
-
 ## Dependencies
 
-Python 3 (the standard library is enough for `reproduce_all.py` and
-`verify_appendix_manuscript.py`), `ortools` for the CP-SAT obstruction and W-family models,
-`scipy`/HiGHS for some MILP scripts, and pandoc + xelatex for a LaTeX rebuild.
+Python 3 (the standard library is enough for `reproduce_all.py`), `ortools` for the CP-SAT
+obstruction and W-family models, and `scipy`/HiGHS for some MILP scripts.
 
 ## What is not here
 
+**The manuscript.** Earlier revisions of this repository shipped a single combined manuscript
+(`manuscript.md` / `.tex` / `.pdf`) together with the tooling that built it and the two checkers
+that read it. That draft has been withdrawn: it predates the current presentation of this work
+and its text is not the authoritative version. It is no longer in the repository, and the files
+that existed only to build or check it — `mathfix.lua`, `scripts/verify_appendix_manuscript.py`,
+`scripts/verify_benchmark_manuscript.py`, and the one-shot editing scripts under `code/` — were
+removed with it. The datasets, models, and run logs that back the numerical claims are unchanged
+and remain here. The withdrawn draft is available from the corresponding author on request.
+
 The pre-submission QA harness — the gate suite and the guards that check the rendered PDF —
-is not distributed, because it rules on files that are internal by nature. It is available
-from the corresponding author on request.
+is not distributed either, because it rules on files that are internal by nature. It is
+available from the corresponding author on request.
