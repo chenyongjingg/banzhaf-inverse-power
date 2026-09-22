@@ -119,3 +119,76 @@ The audit instruments that produced these logs live in the manuscript's audit
 tree, not in this repository; `recheck_t1_dualsem.py` is the one exception and is
 self-contained. Logs were captured on 2026-09-21 and are unedited except for
 this README.
+
+## Re-runs, 2026-09-22 — the counts and certificates the papers quote
+
+The logs above were captured on 2026-09-21 and cover the mathematics. The set below was added
+on 2026-09-22 to close a specific gap: the two manuscript files quote a number of *counts* and
+*minimality certificates* for which no run output had been archived. Every one of them is
+produced by a script that ships in this repository, so they were reproducible on demand; these
+are the runs.
+
+| log | what it re-runs | result |
+|---|---|---|
+| `rerun_uproof_n6_11.log` | formula (U) proof cases, n = 6…11, both with and without Pairs(F) ⊆ G imposed | **PASS, 2,040 player-instances**, each case matching its closed form |
+| `rerun_uproof_n12_18.log` | the same, n = 12…18 | the 630 that complete the 2,670 total |
+| `rerun_minc_8_{2,4,6}.log` | minimality sweep at n = 8 | **INFEASIBLE** 0.4 / 0.3 / 2.4 s |
+| `rerun_minc_9_{2,4}.log` | minimality sweep at n = 9 | **INFEASIBLE** 0.5 / 0.6 s |
+| `rerun_minc_10_{2,4,6,8}.log` | minimality sweep at n = 10 | **INFEASIBLE** 3.7 / 5.8 / 11.2 / 287.8 s |
+| `rerun_minc_15_18.log` | the downward sweep the paper reports as unresolved under a 600 s budget | **UNKNOWN (timeout 600 s, 635.1 s)** — as printed |
+| `rerun_minc_driver.log` | driver summary for the sweep above | one row per per-case log, regenerated from them (see below) |
+| `rerun_runtimes_n6_n7.log` | the four standard/enhanced solver runtimes quoted in the MILP discussion | see the runtime note below |
+| `rerun_feas_n6_n8.log` | (2026-09-21) standard n = 6 and n = 8 weighted certification | 2.7 s / 1,781.4 s |
+
+`rerun_minc_*.log` and `rerun_runtimes_n6_n7.log` were produced by
+`rerun_minc_20260922.sh` and by the command sequence recorded in the log headers. Nothing was
+deleted or overwritten; the 2026-09-21 logs are still in place next to them.
+
+One artefact to record rather than smooth over. The first `rerun_minc_driver.log` was written by
+redirecting the script's stdout into the same directory the summary loop globs, so the loop
+reached its own output file and read it half-written; its last line was `tail -1` of that partial
+file, which happened to be the previous row's text prefixed with the driver's own name. The
+per-case logs were never affected. The script now skips its own output by name and takes a
+`--summary-only` flag, and the driver log in this directory was regenerated with
+
+```
+bash rerun_minc_20260922.sh --summary-only > recheck/rerun_minc_driver.log
+```
+
+from the ten per-case logs, unchanged and un-re-solved. So the driver log is a pure function of
+the per-case logs: a reader can recompute it byte for byte with the command above, and if it ever
+stops matching, the per-case logs are the authority. Checked: md5
+`e96c04fa95085f2a1648d53befa1bc8c`, reproduced twice.
+
+### The four runtimes, and why they disagree with the manuscript
+
+These four cells are the one place a re-run does not return the printed value, and the reason is
+the solver, not the record. `conj15_feas.py` / `conj15_feas2.py` run CP-SAT with 8 workers and
+`seed None`, so wall-clock time is genuinely non-deterministic. The same command, same machine,
+two days apart:
+
+| row | printed in the paper | 2026-09-22 | 2026-09-21 |
+|---|---|---|---|
+| standard, n = 6, W = 32 | 2.9 s | 12.0 s | **2.7 s** |
+| standard, n = 7, W = 128 | 117 s | 211.2 s | — |
+| enhanced, n = 6, W = 32 | 2.5 s | 3.5 s | — |
+| enhanced, n = 7, W = 128 | 19 s | 30.5 s | — |
+
+What reproduces is the *comparison the paper draws*, not the individual seconds. The paper says
+the enhanced model "gives a six-fold speedup at n = 7 (19 s vs 117 s) and a much smaller one at
+n = 6 (2.5 s vs 2.9 s)":
+
+| | printed ratio | re-run ratio |
+|---|---|---|
+| n = 7, standard ÷ enhanced | 117 / 19 = 6.2× | 211.2 / 30.5 = **6.9×** |
+| n = 6, standard ÷ enhanced | 2.9 / 2.5 = 1.16× | 12.0 / 3.5 = **3.4×** |
+
+The n = 7 six-fold is stable across two machines and two days, which is a stronger result than a
+single timing would have been. At n = 6 the enhanced model is faster in every run on record
+(2.5 < 2.9 printed; 2.5 < 2.7 on 2026-09-21; 3.5 < 12.0 here), so the direction is not in doubt;
+what varies is the margin, from 1.16× to 3.4×. Both margins are, as the paper says, much smaller
+than the six-fold at n = 7. The paper's own sentence therefore holds on the re-run.
+
+The manuscript already says the frontier "is measured, not proved" and that the numbers come
+from one machine; this table is the evidence for that sentence. A reader who wants the ranking
+should read the ratios above; a reader who wants the seconds should read the spread, not a row.

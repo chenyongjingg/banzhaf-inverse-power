@@ -1,0 +1,11 @@
+=== summary ===
+rerun_minc_10_2.log                n=10 c=2  INFEASIBLE  (3.7s)
+rerun_minc_10_4.log                n=10 c=4  INFEASIBLE  (5.8s)
+rerun_minc_10_6.log                n=10 c=6  INFEASIBLE  (11.2s)
+rerun_minc_10_8.log                n=10 c=8  INFEASIBLE  (287.8s)
+rerun_minc_15_18.log               n=15 c=18  UNKNOWN(timeout 600s, 635.1s)
+rerun_minc_8_2.log                 n=8 c=2  INFEASIBLE  (0.4s)
+rerun_minc_8_4.log                 n=8 c=4  INFEASIBLE  (0.3s)
+rerun_minc_8_6.log                 n=8 c=6  INFEASIBLE  (2.4s)
+rerun_minc_9_2.log                 n=9 c=2  INFEASIBLE  (0.5s)
+rerun_minc_9_4.log                 n=9 c=4  INFEASIBLE  (0.6s)

@@ -1,0 +1,2 @@
+U PROOF CASES: PASS - 2040 player-instances over n = 6..11, each case matched its closed form and the three summed to the brute-force count
+U PROOF CASES: PASS - 2040 player-instances over n = 6..11 with Pairs(F) subset of G NOT imposed, each case matched its closed form and the three summed to the brute-force count

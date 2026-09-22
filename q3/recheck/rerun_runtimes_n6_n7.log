@@ -1,0 +1,11 @@
+### standard model (conj15_feas.py), n=6 W=32
+n=6 W=32: INFEASIBLE - no weighted game realizes psi^n [12.0s] (8 workers, seed None)
+
+### standard model, n=7 W=128
+n=7 W=128: INFEASIBLE - no weighted game realizes psi^n [211.2s] (8 workers, seed None)
+
+### enhanced model (conj15_feas2.py), n=6 W=32
+n=6 W=32: INFEASIBLE [3.5s] (160 mirror constraints, 8 workers, seed None)
+
+### enhanced model, n=7 W=128
+n=7 W=128: INFEASIBLE [30.5s] (480 mirror constraints, 8 workers, seed None)
