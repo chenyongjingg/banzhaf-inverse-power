@@ -598,10 +598,10 @@ Cross-formulation agreement (same target reached by more than one formulation), 
 ]
 ```
 
-### Cross-check against the paper's own claim (Section 9)
+### Cross-check against the paper's own claim
 
-Section 9 of the manuscript certifies that no weighted majority game realizes psi^n for
-6 <= n <= 10. The F1 rows that terminated with a definite verdict are:
+The weighted-case section of the obstructions paper certifies that no weighted majority game
+realizes psi^n for 6 <= n <= 10. The F1 rows that terminated with a definite verdict are:
 
 - n=6: `INFEASIBLE` -- The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)
 

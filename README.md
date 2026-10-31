@@ -19,8 +19,9 @@ Below, *the closed-form paper* and *the obstructions paper* refer to these two, 
 A third, short note builds on the same certificates: *Two-Level Banzhaf Profiles Are Unattainable by
 Weighted Majority Games: An Exact Classification for Every Number of Voters* (Ziying Xue, Yongjin Chen,
 Songze Zhu). Its main theorem is
-proved, not computed; the note reuses the §3 infeasibility certificates of the obstructions paper and adds
-the verification scripts in `code/two_level/`.
+proved, not computed; the note reuses the weighted-infeasibility certificates of the obstructions paper and
+adds the verification scripts in `code/two_level/`. Section numbers elsewhere in this repository refer to
+the paper named in each case; the note has its own numbering.
 
 This repository holds the machine-readable datasets and every script that reproduces a numerical claim
 in them. It is self-contained and deterministic: no step requires network access.
@@ -33,8 +34,8 @@ in them. It is self-contained and deterministic: no step requires network access
 | `source_manifest.json` | The 18 sources consulted for this project (E001–E018), each with a verification record. A project-level evidence list, not the bibliography of either paper, which is compiled separately |
 | `code/` | 92 Python scripts — constructions, MILP/CP-SAT models, verification, the formulation benchmark |
 | `code/two_level/` | Checks for the two-level note: the swing-difference identity, the counting lemma and the attainable-ratio image of the two-level map, and the n = 6 simple-game witness with its verifier |
-| `q3/` | Weighted-infeasibility experiments (§3 of the obstructions paper) and their server run logs |
-| `q3/recheck/` | Raw logs of an independent re-run of the small-scale certificates on a second machine, including the runs that went wrong and the corrections that superseded them |
+| `q3/` | Weighted-infeasibility experiments of the obstructions paper and their server run logs |
+| `q3/recheck/` | Raw logs of an independent re-run of the small-scale certificates on a second machine, kept unedited together with the repeated runs that confirm them |
 | `data/` | Result datasets (see below) |
 | `scripts/` | The script that reproduces the EU Council case study, and its captured output |
 
@@ -51,12 +52,11 @@ authoritative dataset covering n = 6..80 whose swing vectors were re-verified by
   confirms the swing vector by enumerating all 2ⁿ coalitions. The script asserts the exhaustive-search
   bound before searching, so negative entries in its coverage table are complete for n ≤ 120 rather
   than artifacts of a truncated loop.
-- **Weighted infeasibility (ψⁿ is not realizable by a weighted majority game, n = 6..10), §3 of the
-  obstructions paper.** `python q3/conj15_feas.py` (n ≤ 8) and `python q3/conj15_feas2.py` (n = 9, 10;
-  the enhanced model with (M′) mirror constraints). The weight bound W = 2^(n−1) makes INFEASIBLE
-  conclusive. Run scripts and server logs are in `q3/`. The small-scale certificates were also re-run
-  independently on a second machine; the unedited logs, the two instrument errors those runs exposed,
-  and the runs that superseded them are in `q3/recheck/`.
+- **Weighted infeasibility (ψⁿ is not realizable by a weighted majority game, n = 6..10), obstructions
+  paper.** `python q3/conj15_feas.py` (n ≤ 8) and `python q3/conj15_feas2.py` (n = 9, 10; the enhanced
+  model with (M′) mirror constraints). The weight bound W = 2^(n−1) makes INFEASIBLE conclusive. Run
+  scripts and server logs are in `q3/`. The small-scale certificates were also re-run independently on a
+  second machine; the unedited logs are in `q3/recheck/`, each with a note on what it backs.
 - **Formulation benchmark, §4.4 of the obstructions paper.** `python code/benchmark_formulations.py`
   runs the three formulations (direct weight-space, general monotone, compressed W-family) on n = 6..20
   under one 300 s solver limit and writes `data/benchmark_formulations.json`. The witness check is

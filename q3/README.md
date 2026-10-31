@@ -1,10 +1,13 @@
-# Companion code — Section 9 (The weighted case)
+# Companion code — the weighted case of the obstructions paper
 
-This directory contains the scripts that reproduce every numerical claim of
-Section 9 of the manuscript ("The weighted case": exact infeasibility of the
-egalitarian target over weighted majority games, and certified optimal
-weighted approximations). Each result below is produced by the script named in
-parentheses and re-checked independently where noted.
+This directory contains the scripts that reproduce every numerical claim of the
+weighted case of *Certified obstructions to prescribed Banzhaf power in weighted
+majority games*, the obstructions paper of this repository (see the top-level
+README): exact infeasibility of the egalitarian target over weighted majority
+games, and certified optimal weighted approximations. It is **not** the code for
+the two-level note; the checks specific to that note are in `code/two_level/`.
+Each result below is produced by the script named in parentheses and re-checked
+independently where noted.
 
 ## Verified results
 
@@ -47,7 +50,7 @@ are the global optima over all weighted games at the conclusive weight bound.
 
 ## Script inventory
 
-### Cited in Section 9
+### Cited in the weighted case
 
 - `probe6_identity.py` — swing-count identity (keystone lemma): verifies
   η_i − η_j = 2·#{T ⊆ N∖{i,j} : q−w_i ≤ W(T) < q−w_j} over 12,000 random
@@ -68,7 +71,7 @@ are the global optima over all weighted games at the conclusive weight bound.
 - `probe5_k1_coverage.py` — coverage rates of the (k,1) families over
   n = 6,…,80.
 
-### Cited in Section 11
+### Cited in the appendix of the obstructions paper
 
 - `verify_U_proof.py` — the case decomposition of the proof of formula (U)
   (Proposition 11): on random v(G,F) instances — monotone in the first pass
@@ -120,10 +123,11 @@ experiments above.
 
 `recheck/` holds the raw logs of an independent re-run of the numbers above on a
 second machine, plus a self-contained re-derivation of Theorem 1's formula
-(`recheck/recheck_t1_dualsem.py`). The logs are reproduced unedited, including
-two runs whose *instrument* was wrong and which are superseded by later runs in
-the same directory; `recheck/README.md` records, per log, what it backs and what
-it does not.
+(`recheck/recheck_t1_dualsem.py`). The logs are reproduced unedited. Where a run
+was later repeated with a corrected instrument, the original and the repeat are
+both kept, so that every number reported above can be traced to a log that
+supports it; `recheck/README.md` records, per log, what it backs and what it
+does not.
 
 ## Dependencies
 
