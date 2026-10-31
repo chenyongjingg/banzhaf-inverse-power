@@ -1,7 +1,7 @@
 # Two-level Banzhaf profiles (Brief Report)
 
-Scripts supporting the note *No Weighted Majority Game Realizes a Two-Level
-Banzhaf Profile, for Any Number of Voters*.
+Scripts supporting the note *Two-Level Banzhaf Profiles Are Unattainable by
+Weighted Majority Games: An Exact Classification for Every Number of Voters*.
 
 | Script | What it reproduces |
 |---|---|

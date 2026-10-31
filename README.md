@@ -16,8 +16,9 @@ School of Information Network Security. Corresponding author: 20196846@ppsuc.edu
 
 Below, *the closed-form paper* and *the obstructions paper* refer to these two, in that order.
 
-A third, short note builds on the same certificates: *No Weighted Majority Game Realizes a Two-Level
-Banzhaf Profile, for Any Number of Voters* (Ziying Xue, Yongjin Chen, Songze Zhu). Its main theorem is
+A third, short note builds on the same certificates: *Two-Level Banzhaf Profiles Are Unattainable by
+Weighted Majority Games: An Exact Classification for Every Number of Voters* (Ziying Xue, Yongjin Chen,
+Songze Zhu). Its main theorem is
 proved, not computed; the note reuses the §3 infeasibility certificates of the obstructions paper and adds
 the verification scripts in `code/two_level/`.
 
