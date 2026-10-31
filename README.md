@@ -30,8 +30,8 @@ in them. It is self-contained and deterministic: no step requires network access
 |---|---|
 | `graphical_abstract.pdf` / `.png` / `.py` | Graphical abstract and the script that draws it |
 | `source_manifest.json` | The 18 sources consulted for this project (E001–E018), each with a verification record. A project-level evidence list, not the bibliography of either paper, which is compiled separately |
-| `code/` | 91 Python scripts — constructions, MILP/CP-SAT models, verification, the formulation benchmark |
-| `code/two_level/` | Checks for the two-level note: the swing-difference identity and counting-lemma tests, the n = 6 simple-game witness and its verifier |
+| `code/` | 92 Python scripts — constructions, MILP/CP-SAT models, verification, the formulation benchmark |
+| `code/two_level/` | Checks for the two-level note: the swing-difference identity, the counting lemma and the attainable-ratio image of the two-level map, and the n = 6 simple-game witness with its verifier |
 | `q3/` | Weighted-infeasibility experiments (§3 of the obstructions paper) and their server run logs |
 | `q3/recheck/` | Raw logs of an independent re-run of the small-scale certificates on a second machine, including the runs that went wrong and the corrections that superseded them |
 | `data/` | Result datasets (see below) |
