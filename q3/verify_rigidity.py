@@ -21,7 +21,9 @@ import random
 import sys
 
 TRIALS = int(sys.argv[1]) if len(sys.argv) > 1 else 200000
-SEED = int(sys.argv[2]) if len(sys.argv) > 2 else 2024
+# 7 is the seed that produced rigidity_200k.log, so that running this script
+# with no arguments reproduces the log exactly rather than approximately.
+SEED = int(sys.argv[2]) if len(sys.argv) > 2 else 7
 
 
 def swing_counts(w, q):

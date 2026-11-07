@@ -67,7 +67,8 @@ are the global optima over all weighted games at the conclusive weight bound.
   weighted games (n = 2..7, weights ≤ 12, seed 7): 1,076,149 order tests,
   1,678,053 decomposition tests, 659,831 mirror tests, 0 violations of any of
   the four. Log: `rigidity_200k.log`. Usage:
-  `python verify_rigidity.py [trials] [seed]`.
+  `python verify_rigidity.py [trials] [seed]`; the defaults are 200,000 and
+  seed 7, so running it with no arguments reproduces the log exactly.
   The statements are proved in the manuscript; these checks are corroboration.
   The profile they are aimed at is not realizable by any weighted game (the
   result the obstructions paper certifies), so a check of the statement as
