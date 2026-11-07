@@ -57,8 +57,22 @@ are the global optima over all weighted games at the conclusive weight bound.
   weighted games (n = 3…12, weights ≤ 30), 0 failures.
 - `brute_mirror3.py` — sharp mirror statement (M′): 246,000 random power
   profiles, 0 violations.
-- `brute_mirror4.py` — sharp mirror statement (M′) on real games: 228,000
-  random weighted games with η_i = η_j, 0 violations.
+- `brute_mirror4.py` — sharp mirror statement (M′) on real games: 300,000
+  random weighted games on n = 3..7; the 228,502 with η_i = η_j are the ones
+  the statement applies to, and every one of them satisfies it (0 violations).
+- `verify_rigidity.py` — the four structural statements as pointwise checks:
+  parity of the swing counts (P), strict order of counts implying strict order
+  of weights (O), the gap decomposition (D), and (M′) under the hypothesis real
+  games can satisfy (w_i ≥ w_j > w_s with η_i = η_j). On 200,000 random
+  weighted games (n = 2..7, weights ≤ 12, seed 7): 1,076,149 order tests,
+  1,678,053 decomposition tests, 659,831 mirror tests, 0 violations of any of
+  the four. Log: `rigidity_200k.log`. Usage:
+  `python verify_rigidity.py [trials] [seed]`.
+  The statements are proved in the manuscript; these checks are corroboration.
+  The profile they are aimed at is not realizable by any weighted game (the
+  result the obstructions paper certifies), so a check of the statement as
+  originally phrased would be run on an empty set; what is checked here is the
+  implication under the wider hypothesis that real games do satisfy.
 - `conj15_feas.py` — CP-SAT infeasibility of ψⁿ over weighted majority games
   at W = 2^(n−1) (standard model).
 - `conj15_feas2.py` — enhanced CP-SAT model with the (M′) mirror constraints;

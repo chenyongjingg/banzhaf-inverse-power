@@ -1,0 +1,7 @@
+trials                         : 200000
+seed                           : 7
+games sampled                  : 200000
+(P) parity violations          : 0
+(O) order tests / violations   : 1076149 / 0
+(D) decomposition tests / bad  : 1678053 / 0
+(M) mirror tests / violations  : 659831 / 0
